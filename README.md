@@ -2,7 +2,7 @@
 
 Hexacta 2020
 
-Bienvenido a los Hexacta Labs
+**Bienvenido a los Hexacta Labs**
 
 Agenda:
 * _Initial_: Presentación de la aplicación básica, pasos para correrla localmente y planteo de la primer actividad: Backend con .NetCore.
@@ -10,9 +10,12 @@ Agenda:
 * _Level 2_: Se presenta la aplicación con las actividades anteriores completas. Planteo de la tercera actividad: FullStack development.
 * __Final: Se presenta la aplicación completa. Planteo de la actividad final.__
 
-## [Documentación](./Docs/index.md)
+## [Readme General](https://github.com/lnapoliHX/HexactaLabs-NetCore_React-Initial/blob/master/README.md)
 
-## Actividad Final
+## [Documentación](https://github.com/lnapoliHX/HexactaLabs-NetCore_React-Initial/blob/master/Docs/index.md)
+
+
+# Actividad Final
 Para el trabajo final disponemos de una versión de la Stock Web completa con el manejo CRUD de todas las entidades tanto de backend como de frontend.
 Este ejercicio final propone el modelado e implementación de un carrito de compra, para el que se necesita:
 
@@ -22,29 +25,3 @@ Este ejercicio final propone el modelado e implementación de un carrito de comp
 * Al presionar el botón para realizar la compra, el sistema debe chequear el stock disponible en ese momento para cada producto seleccionado. Si hay stock para un producto en particular, se debe actualizar la cantidad de existencias restando la cantidad que el usuario seleccionó.
 * Aquellos productos que no tienen suficiente stock al momento de realizar la compra no deben ser actualizados.
 * Al finalizar la compra el sistema debe mostrar al usuario una nueva página donde se muestre el detalle de qué productos pudieron reservarse y el precio total de la compra. Tener en cuenta que este precio puede ser distinto al precio que se mostró en la página anterior por falta de stock.
-
-
-## Front end
-
-Para correr la app, solo hace falta estar situado en la carpeta `Stock.Web/client-app` y ejecutar `npm start` en la consola.
-
-Los request a la API se hacen a través del server de desarrollo que usa create-react-app, el cual se configura en el archivo
-`package.json` bajo la key `proxy`. Por defecto, se espera que la API corra en `localhost:5000`.
-
-## Backend
-
-```dotnet run --project Stock.Api/Stock.Api.csproj
-
-
-Posibles problemas: 
-para crear los assets para buildear: 
-ctrl+alt+p => Net generate assets
-
-Si vscode no les carga c# y les muestra un error de: 
-
-se resuelve con este issue: 
-https://stackoverflow.com/questions/55535177/omnisharp-msbuild-projectmanager-attempted-to-update-project-that-is-not-loaded
-
-The SDK 'Microsoft.NET.Sdk.Web' specified could not be found.
-https://github.com/OmniSharp/omnisharp-roslyn/issues/1313#issuecomment-429039879
-```
