@@ -2,6 +2,7 @@ import { replace } from "connected-react-router";
 import api from "../../../common/api";
 import { setLoading, actionTypes } from "../list";
 import { toast } from "react-toastify";
+import { apiErrorToast } from "../../../common/api/apiErrorToast";
 
 function success(id) {
   return {
@@ -10,25 +11,32 @@ function success(id) {
   };
 }
 
+function handleError(dispatch, error) {
+  apiErrorToast(error);
+  
+  return dispatch(setLoading(false));
+}
+
 export function remove(id) {
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(setLoading(true));
     return api
       .delete(`/producttype/${id}`)
       .then(response => {
         if (!response.data.success) {
-          toast.error(response.data.message);
-          dispatch(setLoading(false));
-          return dispatch(replace("/product-type"));
+          var error = {response: {data: {Message: response.data.message}}};
+
+          return handleError(dispatch, error);
         }
 
-        toast.success("El tipo se eliminó con éxito");
         dispatch(success(id));
         dispatch(setLoading(false));
+        toast.success("El tipo se eliminó con éxito");
+        
         return dispatch(replace("/product-type"));
       })
-      .catch(() => {
-        return dispatch(setLoading(false));
+      .catch(error => {
+        return handleError(dispatch, error);
       });
   };
 }

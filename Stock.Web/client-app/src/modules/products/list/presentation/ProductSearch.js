@@ -1,27 +1,25 @@
 import React from "react";
-import { Row, Col, Form, FormGroup, Input, Button } from "reactstrap";
+import { Row, Col, Input, Button } from "reactstrap";
 import { MdSearch, MdCancel } from "react-icons/md";
 
 import PropTypes from "prop-types";
 
 const Search = props => {
-  return (
-    <React.Fragment>
-        <div className="busqueda">
-        <h4>Búsqueda</h4>
-        <Form onSubmit={props.submitFilter}>
-            <div className="flex-container">            
-                <div>
+    return (
+        <React.Fragment>
+            <h4>Búsqueda</h4>
+            <Row>
+                <Col>
                     <Input
-                    name="Name"
-                    id="nameInput"
-                    type="text"
-                    onChange={props.handleFilter}
-                    value={props.filters.Name}
-                    placeholder="Nombre"
+                        name="Name"
+                        id="nameInput"
+                        type="text"
+                        onChange={props.handleFilter}
+                        value={props.filters.Name}
+                        placeholder="Nombre"
                     />
-                </div>
-                <div>
+                </Col>
+                <Col>
                     <Input
                         name="Brand"
                         id="brandInput"
@@ -30,27 +28,25 @@ const Search = props => {
                         value={props.filters.Brand}
                         placeholder="Tipo de producto"
                     />
-                </div>
-                <div className="lastCol">
-                    <Button color="primary" aria-label="Search" className="searchButton">
-                        <MdSearch />
-                    </Button>
-                    <Button color="primary" aria-label="Clear" className="ml-3 clearButton" onClick={props.clearFilter}>
-                        <MdCancel />
-                    </Button>
-                </div>
-            </div>
-        </Form>
-      </div>
-    </React.Fragment>
-  );
+                </Col>
+                <Col>
+                    <Button color="primary" onClick={props.submitFilter}>
+                        <MdSearch /> Buscar
+          </Button>
+                    <Button color="primary" className="ml-3" onClick={props.clearFilter}>
+                        <MdCancel /> Limpiar
+          </Button>
+                </Col>
+            </Row>
+        </React.Fragment>
+    );
 };
 
 Search.propTypes = {
-  handleFilter: PropTypes.func.isRequired,
-  submitFilter: PropTypes.func.isRequired,
-  clearFilter: PropTypes.func.isRequired,
-  filters: PropTypes.object.isRequired
+    handleFilter: PropTypes.func.isRequired,
+    submitFilter: PropTypes.func.isRequired,
+    clearFilter: PropTypes.func.isRequired,
+    filters: PropTypes.object.isRequired
 };
 
 export default Search;

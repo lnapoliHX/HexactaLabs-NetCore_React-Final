@@ -17,14 +17,11 @@ namespace Stock.Api.Controllers
     {
         private readonly ProductTypeService service;
         private readonly IMapper mapper;
-
-        private readonly ProductService productService;
         
-        public ProductTypeController(ProductTypeService service, IMapper mapper, ProductService productService)
+        public ProductTypeController(ProductTypeService service, IMapper mapper)
         {
             this.service = service;
             this.mapper = mapper;
-            this.productService = productService;
         }
 
         /// <summary>
@@ -53,11 +50,18 @@ namespace Stock.Api.Controllers
         /// </summary>
         /// <param name="value">Una instancia</param>
         [HttpPost]
-        public ProductType Post([FromBody] ProductTypeDTO value)
+        public ActionResult Post([FromBody] ProductTypeDTO value)
         {
             TryValidateModel(value);
-            var productType = this.service.Create(this.mapper.Map<ProductType>(value));
-            return this.mapper.Map<ProductType>(productType);
+            
+            try {
+                var productType = this.mapper.Map<ProductType>(value);
+                this.service.Create(productType);
+                value.Id = productType.Id;
+                return Ok(new { Success = true, Message = "", data = value });
+            } catch {
+                return Ok(new { Success = false, Message = "The name is already in use" });
+            }
         }
 
         /// <summary>
@@ -81,19 +85,16 @@ namespace Stock.Api.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(string id)
         {
-            var productType = this.service.Get(id);
+            try {
+                var productType = this.service.Get(id);
 
-             Expression<Func<Product, bool>> filter = x => x.ProductType.Id.Equals(id);
-
-            var products = this.productService.Search(filter);
-
-            if (products.Count() > 0)
-            {
-               return Ok(new { Success = false, Message = "No se pueden eliminar elementos que tiene productos asociados" });
+                Expression<Func<Product, bool>> filter = x => x.ProductType.Id.Equals(id);
+                
+                this.service.Delete(productType);
+                return Ok(new { Success = true, Message = "", data = id });
+            } catch {
+                return Ok(new { Success = false, Message = "", data = id });
             }
-            
-            this.service.Delete(productType);
-            return Ok();
         }
     }
 }

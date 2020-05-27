@@ -1,26 +1,40 @@
 import { toast } from "react-toastify";
 import { setLoading, actionTypes } from "../list";
 import api from "../../../common/api";
-import { goBack } from "connected-react-router";
+import { replace } from "connected-react-router";
+import { apiErrorToast } from "../../../common/api/apiErrorToast";
 
 const success = productType => ({
   type: actionTypes.CREATE,
   productType
 });
 
+function handleError(dispatch, error) {
+  apiErrorToast(error);
+  
+  return dispatch(setLoading(false));
+}
+
 export function create(productType) {
   return function(dispatch) {
     dispatch(setLoading(true));
     return api
-      .post("/producttype", productType)
-      .then((response) => {
-        toast.success("El nuevo tipo se creó con exito");
-        dispatch(success(response.data));
+      .post(`/producttype/`, productType)
+      .then(response => {
+        if (!response.data.success) {
+          var error = {response: {data: {Message: response.data.message}}};
+
+          return handleError(dispatch, error);
+        }
+
+        dispatch(success(response.data.data));
         dispatch(setLoading(false));
-        return dispatch(goBack());
+        toast.success("El nuevo tipo se creó con exito");
+        
+        return dispatch(replace("/product-type"));
       })
-      .catch(() => {
-        return dispatch(setLoading(false));
+      .catch(error => {
+        return handleError(dispatch, error);
       });
   };
 }

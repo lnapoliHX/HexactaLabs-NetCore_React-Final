@@ -10,12 +10,10 @@ const Presentation = props => {
     <Container fluid>
       <Row className="my-1">
         <Col>
-            <div className="block-header">
-                <h1>Categorias</h1>
-            </div>
+          <h1>Categorías</h1>
         </Col>
       </Row>
-      <Row className="my-1 agregarALaLista">
+      <Row className="my-1">
         <Col>
           <Button
             className="product__button"
@@ -23,7 +21,8 @@ const Presentation = props => {
             aria-label="Agregar"
             onClick={() => props.push(props.urls.create)}
           >
-            <FaPlus className="product__button-icon" />            
+            <FaPlus className="product__button-icon" />
+            AGREGAR
           </Button>
         </Col>
       </Row>

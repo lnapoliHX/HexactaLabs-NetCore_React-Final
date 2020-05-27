@@ -1,8 +1,8 @@
 import api from "../../../common/api";
-import { goBack } from 'connected-react-router';
 import { apiErrorToast } from "../../../common/api/apiErrorToast";
 import { setLoading, ActionTypes } from "../list";
 import { toast } from "react-toastify";
+import { replace } from "connected-react-router";
 
 /* Actions */
 function success(product) {
@@ -12,20 +12,32 @@ function success(product) {
   };
 }
 
+function handleError(dispatch, error) {
+  apiErrorToast(error);
+  
+  return dispatch(setLoading(false));
+}
+
 export function create(product) {
   return function (dispatch) {
     dispatch(setLoading(true));
     return api
       .post(`/product/`, product)
       .then((response) => {
-        toast.success("El producto se creó con exito");
-        dispatch(success(response.data));
+        if (!response.data.success) {
+          var error = {response: {data: {Message: response.data.message}}};
+
+          return handleError(dispatch, error);
+        }
+
+        dispatch(success(response.data.data));
         dispatch(setLoading(false));
-        return dispatch(goBack());
+        toast.success("El producto se creó con éxito");
+        
+        return dispatch(replace("/product"));
       })
       .catch(error => {
-        apiErrorToast(error);
-        return dispatch(setLoading(false));
+        return handleError(dispatch, error);
       });
   };
 }

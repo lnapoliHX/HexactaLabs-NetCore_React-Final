@@ -61,12 +61,19 @@ namespace Stock.Api.Controllers
         /// </summary>
         /// <param name="value">Una instancia</param>
         [HttpPost]
-        public ProductDTO Post([FromBody] ProductDTO value)
+        public ActionResult Post([FromBody] ProductDTO value)
         {
             TryValidateModel(value);
-            var product = this.mapper.Map<Product>(value);
-            product.ProductType = this.productTypeService.Get(value.ProductTypeId.ToString());
-            return this.mapper.Map<ProductDTO>(this.service.Create(product));
+
+            try {
+                var product = this.mapper.Map<Product>(value);
+                product.ProductType = this.productTypeService.Get(value.ProductTypeId.ToString());
+                this.service.Create(product);
+                value.Id = product.Id;
+                return Ok(new { Success = true, Message = "", data = value });
+            } catch {
+                return Ok(new { Success = false, Message = "The name is already in use" });
+            }
         }
 
         /// <summary>
@@ -112,10 +119,15 @@ namespace Stock.Api.Controllers
         /// </summary>
         /// <param name="id">Identificador de la instancia a borrar</param>
         [HttpDelete("{id}")]
-        public void Delete(string id)
+        public ActionResult Delete(string id)
         {
-            var product = this.service.Get(id);
-            this.service.Delete(product);
+            try {
+                var product = this.service.Get(id);
+                this.service.Delete(product);
+                return Ok(new { Success = true, Message = "", data = id });
+            } catch {
+                return Ok(new { Success = false, Message = "", data = id });
+            }
         }
 
         /// <summary>
