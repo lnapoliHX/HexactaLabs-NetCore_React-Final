@@ -8,6 +8,7 @@ import View from "../view/container";
 import Create from "../create/container";
 import Update from "../update/container";
 import Remove from "../remove/container";
+import Shoppingbasket from "../shoppingbasket/container";
 import { getLoading, fetchAll } from "../list";
 import Spinner from "../../../components/loading/spinner";
 
@@ -21,7 +22,8 @@ export class ProductsPage extends Component {
       view: `${this.props.match.url}/view/:id`,
       create: `${this.props.match.url}/create`,
       edit: `${this.props.match.url}/update/:id`,
-      remove: `${this.props.match.url}/remove/:id`
+      remove: `${this.props.match.url}/remove/:id`,
+      shoppingbasket: `${this.props.match.url}/shoppingbasket/:id`
     };
 
     return (
@@ -30,6 +32,7 @@ export class ProductsPage extends Component {
           <Route path={urls.view} component={View} />
           <Route path={urls.create} component={Create} />
           <Route path={urls.edit} component={Update} />
+          <Route path={urls.shoppingbasket} component={Shoppingbasket} />
           <Route
             render={() => <List urls={urls} loading={this.props.loading} />}
           />

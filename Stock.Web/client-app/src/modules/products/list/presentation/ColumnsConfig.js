@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
+import { FaEdit, FaTrash, FaSearch, FaShoppingBasket } from "react-icons/fa";
 
 const renderToolbar = ({ value }) => {
   let viewButton = (
@@ -22,11 +22,18 @@ const renderToolbar = ({ value }) => {
     </Link>
   );
 
+  let shoppingBasketButton = (
+    <Link className="product-list__button" to={`/product/shoppingbasket/${value}`}>
+      <FaShoppingBasket className="product-list__button-icon" />
+    </Link>
+  );
+  
   return (
     <span>
       {viewButton}
       {editButton}
       {removeButton}
+      {shoppingBasketButton}
     </span>
   );
 };
