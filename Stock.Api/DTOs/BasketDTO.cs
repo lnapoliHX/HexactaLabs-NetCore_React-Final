@@ -11,6 +11,7 @@ namespace Stock.Api.DTOs
         [Required]
         public string ProductId { get; set; }
         public string ProductDesc { get; set; }
+        public decimal ProductPrice { get; set; }
         
     }
 }
