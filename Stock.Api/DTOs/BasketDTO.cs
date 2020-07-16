@@ -6,6 +6,7 @@ namespace Stock.Api.DTOs
     {
         public string Id { get; set; }
 
+        [Required]
         public int Quantity { get; set; }
 
         [Required]

@@ -56,6 +56,21 @@ namespace Stock.Api.Controllers
             }
         }
 
+       /// <summary>
+        /// Permite borrar una instancia
+        /// </summary>
+        /// <param name="id">Identificador de la instancia a borrar</param>
+        [HttpDelete("{id}")]
+        public ActionResult Delete(string id)
+        {
+            try {
+                var basket = this.service.Get(id);
+                this.service.Delete(basket);
+                return Ok(new { Success = true, Message = "", data = id });
+            } catch {
+                return Ok(new { Success = false, Message = "", data = id });
+            }
+        }
 
         }
 }
