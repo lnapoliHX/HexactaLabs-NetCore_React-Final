@@ -1,4 +1,5 @@
 import api from "../../../common/api";
+import { toast } from "react-toastify";
 
 const initialState = {
   loading: false,
@@ -98,6 +99,40 @@ export function fetchAll() {
       });
   };
 }
+
+export function getImporteTotal() {
+  return function (dispatch) {
+    dispatch(setLoading(true));
+    return api
+      .get("/basket/sumartotal")
+      .then(response => {
+        dispatch(setBasket(response.data));
+        return dispatch(setLoading(false));
+      })
+      .catch(() => {
+        return dispatch(setLoading(false));
+      });
+  };
+}
+
+export function checkout() {
+  return function (dispatch) {
+    dispatch(setLoading(true));
+    return api
+      .put("/basket/comprar")
+      .then(() => {
+        toast.success("Se realizo correntamente el checkout");
+        return dispatch(setLoading(false));
+      })
+      .catch(() => {
+        return dispatch(setLoading(false));
+      });
+    };
+
+}
+
+
+
 
 export function fetchById(id) {
   return function (dispatch) {

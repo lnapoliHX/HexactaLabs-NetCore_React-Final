@@ -11,14 +11,14 @@ const ProductForm = props => {
   return (
     <Form onSubmit={handleSubmit}>
       <Field
-        label="Iniciales"
-        name="initials"
+        label="Producto"
+        name="name"
         component={InputField}
         type="text"
       />
       <Field
-        label="Descripción"
-        name="description"
+        label="Cantidad"
+        name=""
         component={InputField}
         type="text"
       />
@@ -43,7 +43,7 @@ ProductForm.propTypes = {
 };
 
 export default reduxForm({
-  form: "producttype",
+  form: "basket",
   validate: Validator(schema),
   enableReinitialize: true
 })(ProductForm);

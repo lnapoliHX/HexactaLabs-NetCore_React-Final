@@ -75,7 +75,7 @@ namespace Stock.Api.Controllers
         /// <summary>
         /// Permite realizar la compra del carrito
         /// </summary>
-        [HttpPut("basket/comprar")]
+        [HttpPut("comprar")]
         public ActionResult<GenericResultDTO<string>> Comprar()
         {
             return new GenericResultDTO<string>(this.service.Comprar(productService));
@@ -85,7 +85,7 @@ namespace Stock.Api.Controllers
         /// Permite recuperar el monto total del carrito
         /// </summary>
         /// <returns>Monto total del carrito</returns>
-        [HttpGet("basket/sumartotal")]
+        [HttpGet("sumartotal")]
         public ActionResult<GenericResultDTO<decimal>> SumarTotal()
         {
             return new GenericResultDTO<decimal>(this.service.SumarMonto(productService));

@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
-import { getBasket, fetchAll, getLoading } from "..";
+import { getBasket, fetchAll, getImporteTotal, checkout, getLoading } from "..";
 import List from "../presentation";
 
 const mapStateToProps = state => {
@@ -13,6 +13,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   fetchAll,
+  getImporteTotal,
+  checkout,
   push
 };
 

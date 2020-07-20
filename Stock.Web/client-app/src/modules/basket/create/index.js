@@ -4,9 +4,9 @@ import api from "../../../common/api";
 import { replace } from "connected-react-router";
 import { apiErrorToast } from "../../../common/api/apiErrorToast";
 
-const success = productType => ({
+const success = basket => ({
   type: actionTypes.CREATE,
-  productType
+  basket
 });
 
 function handleError(dispatch, error) {
@@ -15,11 +15,11 @@ function handleError(dispatch, error) {
   return dispatch(setLoading(false));
 }
 
-export function create(productType) {
+export function create(basket) {
   return function(dispatch) {
     dispatch(setLoading(true));
     return api
-      .post(`/producttype/`, productType)
+      .post(`/basket/`, basket)
       .then(response => {
         if (!response.data.success) {
           var error = {response: {data: {Message: response.data.message}}};
@@ -29,9 +29,9 @@ export function create(productType) {
 
         dispatch(success(response.data.data));
         dispatch(setLoading(false));
-        toast.success("El nuevo tipo se creó con exito");
+        toast.success("Se agrego con exito el producto al carrito");
         
-        return dispatch(replace("/product-type"));
+        return dispatch(replace("/product"));
       })
       .catch(error => {
         return handleError(dispatch, error);

@@ -1,44 +1,71 @@
-import React, { Component } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { getProductById } from "../../list/index";
-import Product from "../presentation";
-import Remove from "../../remove/container";
-import { push } from "connected-react-router";
-import { Route } from "react-router-dom";
-import PropType from "prop-types";
-// import { getProviderById } from "../../../providers/list";
-// import { getById } from "../../../productType/list";
+import { Container, Row, Col } from "reactstrap";
+import { goBack } from "connected-react-router";
+import Form from "../../../basket/form/presentation";
+import { update } from "..";
+import { getProductById } from "../../list";
+import { getProviders } from "../../../providers/list";
+import { getProductTypes } from "../../../productType/list";
 
-export class ProductShoppingbasketPage extends Component {
-  render() {
-    return (
-      <React.Fragment>
-        <Product {...this.props} />
-        <Route path="/product/view/:id/remove" component={Remove} />
-      </React.Fragment>
-    );
-  }
-}
-
-ProductShoppingbasketPage.propTypes = {
-  product: PropType.object.isRequired
+const Update = ({
+  initialValues,
+  update: onSubmit,
+  goBack: onCancel,
+  productTypeOptions,
+  providerOptions
+}) => {
+  return (
+    <Container fluid>
+      <Row>
+        <Col>
+            <div className="block-header">
+                <h1>Agregar al carrito</h1>
+            </div>
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <Form
+            initialValues={initialValues}
+            productTypeOptions={productTypeOptions}
+            providerOptions={providerOptions}
+            onSubmit={onSubmit}
+            handleCancel={onCancel}
+          />
+        </Col>
+      </Row>
+    </Container>
+  );
 };
 
-const mapStateToProps = (state, ownProps) => {
-  const product = getProductById(state, ownProps.match.params.id);
-  return {
-    product
-    // product,
-    // provider: getProviderById(state, product.providerId),
-    // productType: getById(state, product.productTypeId)
-  };
+Update.propTypes = {
+  productTypeOptions: PropTypes.array.isRequired,
+  providerOptions: PropTypes.array.isRequired,
+  initialValues: PropTypes.object.isRequired,
+  update: PropTypes.func.isRequired,
+  goBack: PropTypes.func.isRequired
 };
+
+const mapStateToProps = (state, ownProps) => ({
+  productTypeOptions: getProductTypes(state).map(pt => ({
+    label: pt.initials,
+    value: pt.id
+  })),
+  providerOptions: getProviders(state).map(provider => ({
+    label: provider.name,
+    value: provider.id
+  })),
+  initialValues: getProductById(state, ownProps.match.params.id)
+});
 
 const mapDispatchToProps = {
-  push
+  update,
+  goBack
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProductShoppingbasketPage);
+)(Update);
