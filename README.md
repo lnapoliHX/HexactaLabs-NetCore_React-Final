@@ -25,3 +25,13 @@ Este ejercicio final propone el modelado e implementación de un carrito de comp
 * Al presionar el botón para realizar la compra, el sistema debe chequear el stock disponible en ese momento para cada producto seleccionado. Si hay stock para un producto en particular, se debe actualizar la cantidad de existencias restando la cantidad que el usuario seleccionó.
 * Aquellos productos que no tienen suficiente stock al momento de realizar la compra no deben ser actualizados.
 * Al finalizar la compra el sistema debe mostrar al usuario una nueva página donde se muestre el detalle de qué productos pudieron reservarse y el precio total de la compra. Tener en cuenta que este precio puede ser distinto al precio que se mostró en la página anterior por falta de stock.
+
+## Tips:
+- El carrito:
+    - no es necesario mantenerlo en backend
+    - al recargar la página (al presionar F5) el carrito se siga manteniendo.
+    - realizar validaciones en backend para comprobar la existencia del producto (puede ocurrir que haya tenido stock en el momento que lo agregó al carrito, pero no al momento de finalizar la compra)
+- Al finalizar la compra, debería almacenarse la misma en backend.
+
+
+
