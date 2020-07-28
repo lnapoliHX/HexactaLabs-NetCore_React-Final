@@ -42,3 +42,7 @@ El sistema debe ser capaz de:
 * Crear, editar y eliminar Productos asociados a una categoría existente a través de la sección __Productos__ dentro del sitio.
 * Realizar búsquedas de productos.
 * La web React debe conectarse con los servicios configurando un store.
+
+## Tips
+- Tener encuenta lo utilizado en *initial* sobre inyección de dependencias, automapper y swagger.
+    - En su defecto, revisar la [Documentación](https://github.com/lnapoliHX/HexactaLabs-NetCore_React-Initial/blob/master/Docs/index.md) nuevamente.
