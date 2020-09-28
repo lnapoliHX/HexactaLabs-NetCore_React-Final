@@ -33,21 +33,3 @@
 .store-view__button-row {
   float: right;
 }
-<<<<<<< HEAD
-=======
-
-.ReactTable .rt-tbody .rt-td .store-list__button {
-  background: none;
-  color: #009688;
-  padding: 0;
-  border-radius: 0;
-  width: 15px;
-  height:15px;
-  margin: 0 15px;
-}
-
-.ReactTable .rt-tbody .rt-td .store-list__button svg {
-  width: inherit;
-  height: inherit;
-}
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4

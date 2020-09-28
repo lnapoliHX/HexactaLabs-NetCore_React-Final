@@ -93,11 +93,7 @@ export function getAll() {
     return api
       .get("/store")
       .then(response => {
-<<<<<<< HEAD
         dispatch(setStores(response.data.stores));
-=======
-        dispatch(setStores(response.data));
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
         return dispatch(setLoading(false));
       })
       .catch(error => {
@@ -116,11 +112,7 @@ export function fetchByFilters(filters) {
     return api
       .post("/store/search", pickBy(filters))
       .then(response => {
-<<<<<<< HEAD
         dispatch(setStores(response.data.stores));
-=======
-        dispatch(setStores(response.data));
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
       })
       .catch(error => {
         apiErrorToast(error);

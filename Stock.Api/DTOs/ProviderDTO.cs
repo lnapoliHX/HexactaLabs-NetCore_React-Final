@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-using System.Collections.Generic;
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
 using System.ComponentModel.DataAnnotations;
 
 namespace Stock.Api.DTOs

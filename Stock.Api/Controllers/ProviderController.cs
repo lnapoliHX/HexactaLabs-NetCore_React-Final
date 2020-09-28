@@ -4,10 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-<<<<<<< HEAD
 using Microsoft.AspNetCore.Http;
-=======
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
 using Stock.Api.DTOs;
 using Stock.Api.Extensions;
 using Stock.AppService.Services;
@@ -29,14 +26,11 @@ namespace Stock.Api.Controllers
             this.mapper = mapper;
         }
 
-<<<<<<< HEAD
         /// <summary>
         /// Permite agregar un nuevo Proveedor al repositorio
         /// </summary>
         /// <param name="value">Propiedades del Proveedor</param>
         /// <returns>Exito o Error y el Proveedor que se intentó crear</returns>
-=======
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
         [HttpPost]
         public ActionResult Post([FromBody] ProviderDTO value)
         {
@@ -47,7 +41,6 @@ namespace Stock.Api.Controllers
                 var provider = this.mapper.Map<Provider>(value);
                 this.service.Create(provider);
                 value.Id = provider.Id;
-<<<<<<< HEAD
                 return Ok(new { Success = true, Message = "Provider Created!", Provider = value });
             }
             catch
@@ -61,23 +54,12 @@ namespace Stock.Api.Controllers
         /// Permite recuperar todos los Proveedores existentes en el repositorio
         /// </summary>
         /// <returns>Una colección de Proveedores o un código en caso de error</returns>
-=======
-                return Ok(new { Success = true, Message = "", data = value });
-            }
-            catch
-            {
-                return Ok(new { Success = false, Message = "The name is already in use" });
-            }
-        }
-
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
         [HttpGet]
         public ActionResult<IEnumerable<ProviderDTO>> Get()
         {
             try
             {
                 var result = this.service.GetAll();
-<<<<<<< HEAD
                 //return this.mapper.Map<IEnumerable<ProviderDTO>>(result).ToList();
                 return Ok(new {Success = true, Message = "List of all Providers", 
                                 Providers = this.mapper.Map<IEnumerable<ProviderDTO>>(result).ToList()} );
@@ -94,23 +76,12 @@ namespace Stock.Api.Controllers
         /// </summary>
         /// <param name="id">Identificador del Proveedor a recuperar</param>
         /// <returns>Una instancia de Proveedor o un código en caso de error</returns>
-=======
-                return this.mapper.Map<IEnumerable<ProviderDTO>>(result).ToList();
-            }
-            catch (Exception)
-            {
-                return StatusCode(500);
-            }
-        }
-
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
         [HttpGet("{id}")]
         public ActionResult<ProviderDTO> Get(string id)
         {
             try
             {
                 var result = this.service.Get(id);
-<<<<<<< HEAD
                 //return this.mapper.Map<ProviderDTO>(result);
                 return Ok(new { Success = true, Message = "Provider Obtained!", 
                         Provider = this.mapper.Map<ProviderDTO>(result) });
@@ -176,44 +147,6 @@ namespace Stock.Api.Controllers
         /// </summary>
         /// <param name="model">Objeto que contiene los parametros de Busquesda</param>
         /// <returns>Lista de los Proveedores filtrados</returns>
-=======
-                return this.mapper.Map<ProviderDTO>(result);
-            }
-            catch (Exception)
-            {
-                return StatusCode(500);
-            }
-        }
-
-        [HttpPut("{id}")]
-        public void Put(string id, [FromBody] ProviderDTO value)
-        {
-            var provider = this.service.Get(id);
-            TryValidateModel(value);
-            this.mapper.Map<ProviderDTO, Provider>(value, provider);
-            this.service.Update(provider);
-        }
-
-        /// <summary>
-        /// Permite borrar una instancia
-        /// </summary>
-        /// <param name="id">Identificador de la instancia a borrar</param>
-        [HttpDelete("{id}")]
-        public ActionResult Delete(string id)
-        {
-            try {
-                var provider = this.service.Get(id);
-
-                Expression<Func<Product, bool>> filter = x => x.ProviderId.Equals(id);
-
-                this.service.Delete(provider);
-                return Ok(new { Success = true, Message = "", data = id });
-            } catch {
-                return Ok(new { Success = false, Message = "", data = id });
-            }
-        }
-
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
         [HttpPost("search")]
         public ActionResult Search([FromBody] ProviderSearchDTO model)
         {
@@ -229,22 +162,14 @@ namespace Stock.Api.Controllers
             if (!string.IsNullOrWhiteSpace(model.Email))
             {
                 filter = filter.AndOrCustom(
-<<<<<<< HEAD
                     x => x.Email.ToLower().Contains(model.Email.ToLower()),
-=======
-                    x => x.Email.ToUpper().Contains(model.Email.ToUpper()),
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
                     model.Condition.Equals(ActionDto.AND));
             }
 
             var providers = this.service.Search(filter);
-<<<<<<< HEAD
             //return Ok(providers);
             return Ok(new {Success = true, Message = "List of filtered Providers", 
                             Providers = providers} );
-=======
-            return Ok(providers);
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
         }
     }
 }
