@@ -71,17 +71,10 @@ const columns = [
     accessor: "productTypeDesc",
     Cell: props => props.value
   },
-    
+  /*  
   {
     Header: <HeaderComponent title="Id de Categoría" />,
     accessor: "productTypeId",
-    Cell: props => props.value
-  },
-  
-  /*
-  {
-    Header: <HeaderComponent title="Proveedores" />,
-    accessor: "providers",
     Cell: props => props.value
   },
   */

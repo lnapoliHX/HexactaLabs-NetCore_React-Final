@@ -18,28 +18,6 @@ const Search = props => {
             placeholder="Nombre"
           />
         </Col>
-        {/*
-        <Col>
-          <Input
-            name="productTypeName"
-            id="productTypeNameInput"
-            type="text"
-            onChange={props.handleFilter}
-            value={props.filters.address}
-            placeholder="Categoría"
-          />
-        </Col>
-        <Col>
-          <Input
-            name="providerName"
-            id="providerNameInput"
-            type="text"
-            onChange={props.handleFilter}
-            value={props.filters.address}
-            placeholder="Proveedor"
-          />
-        </Col>
-        */}
         <Col>
           <Button color="primary" onClick={props.submitFilter}>
             <MdSearch /> Buscar

@@ -7,10 +7,6 @@ import Presentation from "../presentation";
 
 const initialState = {
   name: "",
-  /*
-  productTypeName: "",
-  provider: "",
-  */
   condition: "AND"
 };
 
@@ -25,6 +21,7 @@ class ProductsPage extends React.Component {
   };
 
   onFilterSubmit = () => {
+    console.log('filterSubmit', this.state);
     this.props.fetchByFilters(this.state);
   };
 

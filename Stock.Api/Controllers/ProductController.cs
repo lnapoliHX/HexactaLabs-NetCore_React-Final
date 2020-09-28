@@ -167,7 +167,7 @@ namespace Stock.Api.Controllers
 
             var products = this.service.Search(filter);
             return Ok(new {Success = true, Message = "List of all Products", 
-                            Stores = products} );
+                            Products = this.mapper.Map<IEnumerable<ProductDTO>>(products).ToList()} );
         }
     }
 }
