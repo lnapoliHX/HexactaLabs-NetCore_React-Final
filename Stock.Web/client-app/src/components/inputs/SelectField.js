@@ -9,7 +9,6 @@ const SelectField = props => {
     label,
     type,
     options,
-<<<<<<< HEAD
     value,
     onChangeFunction,
     defaultValue,
@@ -21,11 +20,6 @@ const SelectField = props => {
   input.value = value;
   //console.log('input:', input);
 
-=======
-    meta: { touched, error, pristine }
-  } = props;
-
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
   return (
     <FormGroup>
       <Label htmlFor={input.name}>{label}</Label>
@@ -37,7 +31,6 @@ const SelectField = props => {
         id={input.name}
         type={type || "select"}
         multiple={multiple}
-<<<<<<< HEAD
         onChange={onChangeFunction}
         value={defaultValue}
         defaultValue={onChangeFunction}
@@ -47,14 +40,6 @@ const SelectField = props => {
                   {each.label}
                 </option>)
              )}
-=======
-      >
-        {options.map((each, index) => (
-          <option key={index} {...each}>
-            {each.label}
-          </option>
-        ))}
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
       </Input>
       <FormFeedback>{error}</FormFeedback>
     </FormGroup>

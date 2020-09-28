@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .provider__button,
 .product__button {
   font-size: 1em;
@@ -6,19 +5,11 @@
 
 .provider__button-icon,
 .product__button-icon {
-=======
-.provider__button {
-  font-size: 1em;
-}
-
-.provider__button-icon {
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
   font-size: 0.8em;
   margin-right: 4px;
 }
 
 .provider-form__button,
-<<<<<<< HEAD
 .provider-list__button,
 .product-list__button {
   margin: 0 2px 0;
@@ -26,13 +17,6 @@
 
 .provider-list__button,
 .product-list__button {
-=======
-.provider-list__button {
-  margin: 0 2px 0;
-}
-
-.provider-list__button {
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
   display: inline-block;
   padding: 0 5px 0;
   border: 1px solid transparent;
@@ -41,22 +25,14 @@
   color: white;
 }
 
-<<<<<<< HEAD
 .provider-list__button:hover,
 .product-list__button:hover {
-=======
-.provider-list__button:hover {
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
   color: white;
   background-color: #0069d9;
 }
 
-<<<<<<< HEAD
 .provider-list__button-icon,
 .product-list__button-icon {
-=======
-.provider-list__button-icon {
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
   margin-top: -4px;
 }
 
@@ -227,12 +203,8 @@
     display: flex;
 }
 
-<<<<<<< HEAD
 .ReactTable .rt-tbody .rt-td .provider-list__button,
 .ReactTable .rt-tbody .rt-td .product-list__button {
-=======
-.ReactTable .rt-tbody .rt-td .provider-list__button {
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
     background: none;
     color: #009688;
     padding: 0;
@@ -242,12 +214,8 @@
     margin: 0 15px;
 }
 
-<<<<<<< HEAD
 .ReactTable .rt-tbody .rt-td .provider-list__button svg,
 .ReactTable .rt-tbody .rt-td .product-list__button svg {
-=======
-.ReactTable .rt-tbody .rt-td .provider-list__button svg {
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
     width: inherit;
     height: inherit;
 }
@@ -385,13 +353,10 @@
     fill: #fff;
 }
 
-<<<<<<< HEAD
 .product__button svg{
     fill: #059084;
 }
 
-=======
->>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
 .btn:hover svg, .btn:focus svg,
 .btn-primary:hover svg, .btn-primary:focus svg,
 .btn-default:hover, .btn-default:focus,
