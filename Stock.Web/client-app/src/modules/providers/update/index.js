@@ -17,6 +17,7 @@ export function update(provider) {
     dispatch(setLoading(true));
     return api
       .put(`/provider/${provider.id}`, provider)
+<<<<<<< HEAD
       .then(response => {
         if (response.data.success) {
           toast.success("El proveedor se editó con éxito");
@@ -27,6 +28,13 @@ export function update(provider) {
           toast.error("El Proveedor ya existe.");
           return dispatch(setLoading(false));  
         }
+=======
+      .then(() => {
+        toast.success("El proveedor se editó con éxito");
+        dispatch(success(provider));
+        dispatch(setLoading(false));
+        return dispatch(goBack());
+>>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
       })
       .catch(error => {
         apiErrorToast(error);

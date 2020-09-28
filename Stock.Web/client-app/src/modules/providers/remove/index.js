@@ -12,6 +12,15 @@ function success(id) {
   };
 }
 
+<<<<<<< HEAD
+=======
+function handleError(dispatch, error) {
+  apiErrorToast(error);
+  
+  return dispatch(setLoading(false));
+}
+
+>>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
 export function remove(id) {
   return function(dispatch) {
     dispatch(setLoading(true));
@@ -19,6 +28,7 @@ export function remove(id) {
       .delete(`/provider/${id}`)
       .then(response => {
         if (!response.data.success) {
+<<<<<<< HEAD
           toast.error(response.data.message);
           dispatch(setLoading(false));
           return dispatch(replace("/provider"));
@@ -32,6 +42,21 @@ export function remove(id) {
       .catch(error => {
         apiErrorToast(error);
         return dispatch(setLoading(false));
+=======
+          var error = {response: {data: {Message: response.data.message}}};
+
+          return handleError(dispatch, error);
+        }
+
+        dispatch(success(id));
+        dispatch(setLoading(false));
+        toast.success("Se eliminó el proveedor con éxito");
+        
+        return dispatch(replace("/provider"));
+      })
+      .catch(error => {
+        return handleError(dispatch, error);
+>>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
       });
   };
 }

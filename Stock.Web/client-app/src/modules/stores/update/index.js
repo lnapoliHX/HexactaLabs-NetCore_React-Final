@@ -17,6 +17,7 @@ export function update(store) {
     dispatch(setLoading(true));
     return api
       .put(`/store/${store.id}`, store)
+<<<<<<< HEAD
       .then(response => {
         if (response.data.success) {
           toast.success("La tienda se editó con éxito");
@@ -27,6 +28,13 @@ export function update(store) {
           toast.error("La tienda ya existe.");
           return dispatch(setLoading(false));  
         }
+=======
+      .then(() => {
+        toast.success("La tienda se editó con éxito");
+        dispatch(success(store));
+        dispatch(setLoading(false));
+        return dispatch(goBack());
+>>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
       })
       .catch(error => {
         apiErrorToast(error);

@@ -10,6 +10,7 @@ namespace Stock.AppService.Services
             : base(repository)
         {
         }
+<<<<<<< HEAD
 
         public new ProductType Create(ProductType entity)
         {
@@ -56,5 +57,7 @@ namespace Stock.AppService.Services
 
             throw new System.Exception("The Initials or the Description are already in use");
         }
+=======
+>>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
     }
 }

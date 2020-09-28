@@ -35,7 +35,11 @@ namespace Stock.Api
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.Configure<DomainSettings>(Configuration.GetSection("DomainSettings"));
             services.AddTransient<StoreService>();
+<<<<<<< HEAD
             services.AddTransient<ProductService>();
+=======
+            //services.AddTransient<ProductService>();
+>>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
             services.AddTransient<ProviderService>();
             services.AddTransient<ProductTypeService>();
             services.AddTransient<Repository.LiteDb.Configuration.ConfigurationProvider>();

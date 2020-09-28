@@ -13,6 +13,7 @@ namespace Stock.Api.MapperProfiles
                 .ReverseMap()
                 .ForMember(s => s.Id, opt => opt.Ignore());
 
+<<<<<<< HEAD
             CreateMap<Product, ProductDTO>()
                 .ForMember(d => d.ProductTypeId, opt => opt.MapFrom(s => s.ProductType.Id))
                 .ForMember(d => d.ProductTypeDesc, opt => opt.MapFrom(s => s.ProductType.Description))
@@ -23,6 +24,17 @@ namespace Stock.Api.MapperProfiles
 
             CreateMap<Provider, ProviderDTO>()
                  .ReverseMap();         
+=======
+            // CreateMap<Product, ProductDTO>()
+            //     .ForMember(d => d.ProductTypeId, opt => opt.MapFrom(s => s.ProductType.Id))
+            //     .ForMember(d => d.ProductTypeDesc, opt => opt.MapFrom(s => s.ProductType.Description))
+            //     .ReverseMap()
+            //     .ForMember(s => s.Id, opt => opt.Ignore())
+            //     .ForMember(s => s.ProductType, opt => opt.Ignore());       
+
+            CreateMap<Provider, ProviderDTO>()
+                .ReverseMap();         
+>>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
         }        
     }
 

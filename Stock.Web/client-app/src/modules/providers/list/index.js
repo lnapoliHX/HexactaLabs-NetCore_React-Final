@@ -107,7 +107,11 @@ export function getAll() {
     return api
       .get("/provider")
       .then(response => {
+<<<<<<< HEAD
         dispatch(setProviders(response.data.providers));
+=======
+        dispatch(setProviders(response.data));
+>>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
         return dispatch(setLoading(false));
       })
       .catch(error => {
@@ -126,7 +130,11 @@ export function fetchByFilters(filters) {
     return api
       .post("/provider/search", pickBy(filters))
       .then(response => {
+<<<<<<< HEAD
         dispatch(setProviders(response.data.providers));
+=======
+        dispatch(setProviders(response.data));
+>>>>>>> 6df99f5f4d613fd1494eaa06a4f06e9e68db8cb4
       })
       .catch(error => {
         apiErrorToast(error);
