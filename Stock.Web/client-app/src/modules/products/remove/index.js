@@ -18,17 +18,17 @@ export function remove(id) {
   return function (dispatch) {
     dispatch(setLoading(true));
     return api
-      .delete(`/productType/${id}`)
+      .delete(`/product/${id}`)
       .then(response => {
         if (response.status !== OK_STATUS) {
           toast.error(response.data.message);
           dispatch(setLoading(false));
-          return dispatch(replace("/productType"));
+          return dispatch(replace("/product"));
         }
 
-        toast.success("Se eliminó la Categoría con éxito");
+        toast.success("Se eliminó el producto con éxito");
         dispatch(success(id));
-        dispatch(replace("/productType"));
+        dispatch(replace("/product"));
         return dispatch(setLoading(false));
       })
       .catch(error => {

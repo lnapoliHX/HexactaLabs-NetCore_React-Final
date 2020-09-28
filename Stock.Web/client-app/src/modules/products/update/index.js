@@ -5,26 +5,26 @@ import { apiErrorToast } from "../../../common/api/apiErrorToast";
 import { setLoading, ActionTypes } from "../list";
 
 /* Actions */
-function success(productType) {
+function success(product) {
   return {
     type: ActionTypes.UPDATE,
-    productType
+    product
   };
 }
 
-export function update(productType) {
+export function update(product) {
   return function(dispatch) {
     dispatch(setLoading(true));
     return api
-      .put(`/productType/${productType.id}`, productType)
+      .put(`/product/${product.id}`, product)
       .then(response => {
         if (response.data.success) {
-          toast.success("La Categoría se editó con éxito");
-          dispatch(success(response.data.productType));
+          toast.success("El producto se editó con éxito");
+          dispatch(success(response.data.product));
           dispatch(setLoading(false));
           return dispatch(goBack()); 
         } else {
-          toast.error("La Categoría ya existe.");
+          toast.error("El producto ya existe.");
           return dispatch(setLoading(false));  
         }
       })

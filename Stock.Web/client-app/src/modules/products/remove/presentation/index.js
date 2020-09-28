@@ -5,8 +5,8 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 const ElementRemove = ({ remove, goBack }) => {
   return (
     <Modal isOpen>
-      <ModalHeader>Eliminar Categoría</ModalHeader>
-      <ModalBody>¿Desea eliminar esta Categoría?</ModalBody>
+      <ModalHeader>Eliminar producto</ModalHeader>
+      <ModalBody>¿Desea eliminar este producto?</ModalBody>
       <ModalFooter>
         <Button color="danger" onClick={remove}>
           Si
@@ -24,6 +24,6 @@ ElementRemove.propTypes = {
   goBack: PropTypes.func.isRequired
 };
 
-ElementRemove.displayName = "ProductTypeRemove";
+ElementRemove.displayName = "ProductRemove";
 
 export default ElementRemove;

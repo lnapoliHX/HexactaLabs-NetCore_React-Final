@@ -5,33 +5,39 @@ import { setLoading, ActionTypes } from "../list";
 import { toast } from "react-toastify";
 
 /* Actions */
-function success(productType) {
+function success(product) {
   return {
     type: ActionTypes.CREATE,
-    productType
+    product
   };
 }
 
-export function create(productType) {
+export function create(product) {
   return function(dispatch) {
     dispatch(setLoading(true));
+    product.costPrice = parseFloat(product.costPrice);
+    product.salePrice = parseFloat(product.salePrice);
+    product.stock = parseInt(product.stock);
+    product.providers = [];
     return api
-      .post(`/productType/`, productType)
+      .post(`/product/`, product)
       .then(response => {
         if (response.data.success) {
-          toast.success("La Categoría se creó con éxito");
-          dispatch(success(response.data.productType));
+          toast.success("El producto se creó con éxito");
+          dispatch(success(response.data.product));
           dispatch(setLoading(false));
           return dispatch(goBack());  
         } else {
-          //apiErrorToast(error);
-          toast.error("La Categoría ya existe.");
+          console.log('fail***', response);
+          toast.error("El producto ya existe.");
           return dispatch(setLoading(false));  
         }
       })
       .catch(error => {
+        console.log('error***', error);
         apiErrorToast(error);
         return dispatch(setLoading(false));
       });
   };
 }
+

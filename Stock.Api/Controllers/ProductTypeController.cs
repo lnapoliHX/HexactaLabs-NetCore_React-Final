@@ -1,13 +1,14 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Stock.Api.DTOs;
 using Stock.AppService.Services;
 using Stock.Model.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
+
 
 namespace Stock.Api.Controllers
 {

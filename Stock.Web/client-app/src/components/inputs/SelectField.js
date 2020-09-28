@@ -9,8 +9,16 @@ const SelectField = props => {
     label,
     type,
     options,
+    value,
+    onChangeFunction,
+    defaultValue,
     meta: { touched, error, pristine }
   } = props;
+
+  //console.log('selectField value:', value);
+  //console.log('props', props);
+  input.value = value;
+  //console.log('input:', input);
 
   return (
     <FormGroup>
@@ -23,12 +31,15 @@ const SelectField = props => {
         id={input.name}
         type={type || "select"}
         multiple={multiple}
+        onChange={onChangeFunction}
+        value={defaultValue}
+        defaultValue={onChangeFunction}
       >
-        {options.map((each, index) => (
-          <option key={index} {...each}>
-            {each.label}
-          </option>
-        ))}
+        {options.map(each => 
+                (<option key={each.id} {...each}>
+                  {each.label}
+                </option>)
+             )}
       </Input>
       <FormFeedback>{error}</FormFeedback>
     </FormGroup>
