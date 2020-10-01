@@ -18,7 +18,7 @@ export function create(product) {
     product.costPrice = parseFloat(product.costPrice);
     product.salePrice = parseFloat(product.salePrice);
     product.stock = parseInt(product.stock);
-    product.providers = [];
+    console.log('create', product);
     return api
       .post(`/product/`, product)
       .then(response => {

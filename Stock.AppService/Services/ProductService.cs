@@ -44,7 +44,17 @@ namespace Stock.AppService.Services
 
             throw new System.Exception("The name is already in use");
         }
-       
+
+        public IEnumerable<Product> GetProductsByProductTypeId(string id) 
+        {
+            return this.Repository.List(x => x.ProductType.Id.Equals(id));
+        }
+
+        public IEnumerable<Product> GetProductsByProviderId(string id) 
+        {
+            return this.Repository.List(x => x.ProviderId.Equals(id));
+        }
+
         public IEnumerable<Product> Search(Expression<Func<Product, bool>> filter)
         {
             return this.Repository.List(filter);

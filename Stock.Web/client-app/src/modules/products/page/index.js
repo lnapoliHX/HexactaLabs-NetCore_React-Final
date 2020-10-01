@@ -8,12 +8,12 @@ import View from "../view/container";
 import Create from "../create/container";
 import Update from "../update/container";
 import Remove from "../remove/container";
-import { getLoading, getAll } from "../list";
+import { getLoading, getAllData } from "../list";
 import Spinner from "../../../components/loading/spinner";
 
 export class Page extends Component {
   componentDidMount() {
-    this.props.getAll();
+    this.props.getAllData();
   }
 
   render() {
@@ -44,7 +44,7 @@ export class Page extends Component {
 Page.propTypes = {
   match: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
-  getAll: PropTypes.func.isRequired
+  getAllData: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -52,7 +52,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  getAll
+  getAllData
 };
 
 export default connect(

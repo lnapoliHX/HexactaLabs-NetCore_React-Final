@@ -3,51 +3,43 @@ import PropTypes from "prop-types";
 import { Field, reduxForm } from "redux-form";
 import { Form, Button } from "reactstrap";
 import Validator from "../../../../common/helpers/YupValidator";
-import CustomInputField from "../../../../components/inputs/CustomInputField.js";
-import ProductTypeDropDownPage from "../../../productTypes/dropdown/page/index"
+import InputField from "../../../../components/inputs/InputField.js";
+import SelectField from "../../../../components/inputs/SelectField.js";
+//import ProductTypeDropDownPage from "../../../productTypes/dropdown/page/index"
 import schema from "../validation";
 
 const ProductForm = props => {
-  const { handleSubmit, handleCancel, handleChange, product, initProductType } = props;
+  const { handleSubmit, handleCancel, } = props;
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Field label="Nombre" name="name" component={CustomInputField} type="text"
-            onChangeFunction={handleChange} defaultValue={product.name}/>
-      <Field label="Costo" name="costPrice" component={CustomInputField} type="number" 
-            onChangeFunction={handleChange} defaultValue={product.costPrice}/>
-              {//pattern="^[0-9]\d*\.?\d*$"/>
-              }
-      <Field label="Precio de Venta" name="salePrice" component={CustomInputField} type="number" 
-            onChangeFunction={handleChange} defaultValue={product.salePrice}/>
-              {//pattern="^[0-9]\d*\.?\d*$"/>
-              }
-      <Field label="Stock" name="stock" component={CustomInputField} type="number" 
-            onChangeFunction={handleChange} defaultValue={product.stock}/>
-              {//pattern="^[0-9]\d*$"/>
-              }
-      <Field label="Categoría" name="productTypeDesc" component={ProductTypeDropDownPage} 
-            //productTypeId={product.productType.id}
-            onChangeFunction={handleChange} 
-            defaultValue={product.productType.description}
-            initProductType={initProductType}/>
-      {/*
-      <Field
-        label="Id de Categoría"
-        name="productTypeId"
-        component={CustomInputField}
-        type="text"
-        defaultValue={product.productType.id}
-      />
-      
-      <Field
-        label="Categoría"
-        name="productTypeDesc"
-        component={SelectField}
-        type="select"
-        options={productTypesOptions}
-      />
-      */}
+      <Field label="Nombre" name="name" component={InputField} type="text" />
+      <Field label="Costo" name="costPrice" component={InputField} type="number" 
+              parse={v => {
+                if (isNaN(Number.parseFloat(v)) === true)
+                  return ''
+                else 
+                  return Number.parseFloat(v)
+              }} />
+      <Field label="Precio de Venta" name="salePrice" component={InputField} type="number" 
+              parse={v => {
+                if (isNaN(Number.parseFloat(v)) === true)
+                  return ''
+                else 
+                  return Number.parseFloat(v)
+              }} />
+      <Field label="Stock" name="stock" component={InputField} type="number" 
+              parse={v => {
+                if (isNaN(Number.parseFloat(v)) === true)
+                  return ''
+                else 
+                  return Number.parseFloat(v)
+              }} />
+      <Field label="Categoría" name="productTypeId" component={SelectField} type="select"
+              options={props.productTypeOptions}/>
+      <Field label="Proveedor" name="providerId" component={SelectField} type="select"
+              options={props.providerOptions}/>
+
       {/*<ProductTypeDropDownPage  />
       */}
       {/*

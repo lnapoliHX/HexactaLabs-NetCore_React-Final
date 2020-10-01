@@ -6,8 +6,17 @@ import { Container, Row, Col } from "reactstrap";
 import { getProductById } from "../../list";
 import { update } from "..";
 import Form from "../../form/presentation";
+import { getProductTypes } from "../../../productTypes/list";
+import { getProviders } from "../../../providers/list";
 
-const Update = ({ initialValues, update: onSubmit, goBack: onCancel }) => {
+const Update = (
+  { 
+    update: onSubmit, 
+    goBack: onCancel,
+    productTypeOptions,
+    providerOptions,
+    initialValues
+  }) => {
   return (
     <Container fluid>
       <Row>
@@ -17,8 +26,10 @@ const Update = ({ initialValues, update: onSubmit, goBack: onCancel }) => {
         <Col>
           <Form
             initialValues={initialValues}
-            onSubmit={onSubmit}
-            handleCancel={onCancel}
+            productTypeOptions={productTypeOptions}
+            providerOptions={providerOptions}
+            onSubmit={onSubmit} 
+            handleCancel={onCancel} 
           />
         </Col>
       </Row>
@@ -28,13 +39,29 @@ const Update = ({ initialValues, update: onSubmit, goBack: onCancel }) => {
 
 Update.propTypes = {
   initialValues: PropTypes.object.isRequired,
+  productTypeOptions: PropTypes.array.isRequired,
+  providerOptions: PropTypes.array.isRequired,
   update: PropTypes.func.isRequired,
-  goBack: PropTypes.func.isRequired
+  goBack: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  initialValues: getProductById(state, ownProps.match.params.id)
-});
+const mapStateToProps = (state, ownProps) => {
+  const productTypes = getProductTypes(state);
+  const providers = getProviders(state);
+  return {
+    initialValues: getProductById(state, ownProps.match.params.id),
+    productTypeOptions: productTypes.map(pt => ({
+      id: pt.id,
+      label: pt.description,
+      value: pt.id
+    })),
+    providerOptions: providers.map(provider => ({
+      id: provider.id,
+      label: provider.name,
+      value: provider.id
+    })),
+  }
+};
 
 const mapDispatchToProps = {
   update,

@@ -18,11 +18,13 @@ namespace Stock.Api.Controllers
     public class ProductController : ControllerBase
     {
         private ProductService service;
+        private ProductTypeService productTypeService;
         private readonly IMapper mapper;
 
-        public ProductController(ProductService service, IMapper mapper)
+        public ProductController(ProductService service, ProductTypeService productTypeService, IMapper mapper)
         {
             this.service = service;
+            this.productTypeService = productTypeService;
             this.mapper = mapper;
         }
 
@@ -40,6 +42,7 @@ namespace Stock.Api.Controllers
             try
             {
                 var product = this.mapper.Map<Product>(value);
+                product.ProductType = this.productTypeService.Get(value.ProductTypeId.ToString());
                 product.AddStock(value.Stock);
                 this.service.Create(product);
                 value.Id = product.Id;
@@ -118,12 +121,12 @@ namespace Stock.Api.Controllers
                                 //ProductStock_AfterMapper = afterMapperProductStock,
                                 //ProductStock_AfterAddStock = afterAddStockProductStock,
                                 //DtoStock = dtoStock, 
-                                Product = product });
+                                Product = value });
             }
             catch
             {
                 return Ok(new { Success = false, 
-                                Message = "The name is already in use!!!", Product = product });
+                                Message = "The name is already in use!!!", Product = value });
             }
         }
 

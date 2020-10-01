@@ -56,5 +56,6 @@ namespace Stock.AppService.Services
 
             throw new System.Exception("The Initials or the Description are already in use");
         }
+     
     }
 }

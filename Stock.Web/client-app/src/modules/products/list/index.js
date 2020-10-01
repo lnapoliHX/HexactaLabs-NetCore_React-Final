@@ -1,10 +1,14 @@
 import { pickBy } from "lodash";
 import api from "../../../common/api";
 import { apiErrorToast } from "../../../common/api/apiErrorToast";
+import { setProviders } from "../../providers/list";
+import { setProductTypes } from "../../productTypes/list";
 
 const initialState = {
   loading: false,
-  products: []
+  products: [],
+//  productTypes: [],
+//  providers: []
 };
 
 /* Action types */
@@ -34,7 +38,9 @@ function handleLoading(state, { loading }) {
 function handleSet(state, { products }) {
   return {
     ...state,
-    products
+    products,
+//    ids: products.map(products => products.id),
+//    byId: normalize(products)
   };
 }
 
@@ -87,15 +93,19 @@ export function setProducts(products) {
   };
 }
 
-export function getAll() {
+export function getAllData() {
   return dispatch => {
     dispatch(setLoading(true));
-    return api
-      .get("/product")
-      .then(response => {
-        dispatch(setProducts(response.data.products));
-        return dispatch(setLoading(false));
-      })
+    return Promise.all([
+      api.get("/product"),
+      api.get("/producttype"),
+      api.get("/provider")])
+      .then(([responseProducts, responseProductTypes, responseProviders]) => {
+          dispatch(setProducts(responseProducts.data.products));
+          dispatch(setProductTypes(responseProductTypes.data.productTypes));
+          dispatch(setProviders(responseProviders.data.providers));
+          return dispatch(setLoading(false));
+        })
       .catch(error => {
         apiErrorToast(error);
         return dispatch(setLoading(false));
@@ -104,7 +114,7 @@ export function getAll() {
 }
 
 export function getById(id) {
-  return getAll({ id });
+  return getAllData({ id });
 }
 
 export function fetchByFilters(filters) {

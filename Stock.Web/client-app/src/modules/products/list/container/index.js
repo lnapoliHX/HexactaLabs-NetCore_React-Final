@@ -2,7 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import PropTypes from "prop-types";
-import { getProducts, getAll, fetchByFilters } from "../index";
+import { getProducts, getAllData, fetchByFilters } from "../index";
+import { getProductTypes } from "../../../productTypes/list/index"
+import { getProviders } from "../../../providers/list/index"
 import Presentation from "../presentation";
 
 const initialState = {
@@ -27,11 +29,15 @@ class ProductsPage extends React.Component {
 
   onFilterReset = () => {
     this.setState({ ...initialState });
-    this.props.getAll();
+    this.props.getAllData();
   };
 
   render() {
-    const { products, loading, ...rest } = this.props;
+    const { products, productTypes, providers, loading, ...rest } = this.props;
+    console.log('products/list/container');
+    console.log('products', products);
+    console.log('productTypes', productTypes);
+    console.log('providers', providers);
 
     return (
       <Presentation
@@ -51,17 +57,27 @@ class ProductsPage extends React.Component {
 ProductsPage.propTypes = {
   products: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired,
-  getAll: PropTypes.func.isRequired,
+  getAllData: PropTypes.func.isRequired,
   push: PropTypes.func.isRequired,
   fetchByFilters: PropTypes.func.isRequired
 };
 
-const mapStateToProps = state => ({
-  products: getProducts(state)
-});
+const mapStateToProps = state => {
+  return {
+    productTypes: getProductTypes(state),
+    providers: getProviders(state),
+    products: getProducts(state).map(product => ({
+      ...product,
+      productTypeDesc: getProductTypes(state).length > 0 ? 
+                          getProductTypes(state).find(pt => pt.id === product.productTypeId).description : '',
+      providerName: getProviders(state).length > 0 ? 
+                          getProviders(state).find(prov => prov.id === product.providerId).name : '',                   
+  })),
+  }
+};
 
 const mapDispatchToProps = {
-  getAll,
+  getAllData,
   push,
   fetchByFilters
 };

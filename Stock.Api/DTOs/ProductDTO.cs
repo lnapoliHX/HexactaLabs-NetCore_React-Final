@@ -14,7 +14,7 @@ namespace Stock.Api.DTOs
 
         public string ProductTypeDesc { get; set; }
 
-        public string ProviderName{ get; set; }
+        public string ProviderId{ get; set; }
 
         public decimal CostPrice { get; set; }
 
@@ -24,7 +24,9 @@ namespace Stock.Api.DTOs
 
         //private int _stock {get; set; }
 
-        public List<ProviderDTO> Providers {get; set; }
+        //public List<ProviderDTO> Providers {get; set; }
+
+
 
     }
 }

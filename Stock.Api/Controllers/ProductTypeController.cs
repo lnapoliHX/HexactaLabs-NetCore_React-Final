@@ -18,11 +18,13 @@ namespace Stock.Api.Controllers
     public class ProductTypeController : ControllerBase
     {
         private readonly ProductTypeService service;
+        private ProductService productService;
         private readonly IMapper mapper;
         
-        public ProductTypeController(ProductTypeService service, IMapper mapper)
+        public ProductTypeController(ProductTypeService service, ProductService productService,IMapper mapper)
         {
             this.service = service;
+            this.productService = productService;
             this.mapper = mapper;
         }
 
@@ -147,14 +149,23 @@ namespace Stock.Api.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(string id)
         {
-            var productType = this.service.Get(id);
-
-            //Expression<Func<Product, bool>> filter = x => x.ProductType.Id.Equals(id);
             
             try
             {          
-                this.service.Delete(productType);
-                return Ok(new { Success = true, Message = "Product Type Deleted!", data = id });
+                var productType = this.service.Get(id);
+                IEnumerable<Product> products = this.productService.GetProductsByProductTypeId(id);
+
+                //Expression<Func<Product, bool>> filter = x => x.ProductType.Id.Equals(id);
+                if (products.Count() == 0) 
+                {
+                    this.service.Delete(productType);
+                    return Ok(new { Success = true, Message = "Product Type Deleted!", data = id });
+                }
+                else
+                {
+                    return Ok(new { Success = false, Message = "Product Type have Products binded!", data = id });    
+                }
+
             }
             catch
             {

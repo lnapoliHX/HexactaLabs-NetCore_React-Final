@@ -4,7 +4,7 @@ import { setLoading, ActionTypes } from "../list";
 import api from "../../../common/api";
 import { apiErrorToast } from "../../../common/api/apiErrorToast";
 
-const OK_STATUS = 200;
+//const OK_STATUS = 200;
 
 /* Actions */
 function success(id) {
@@ -20,12 +20,11 @@ export function remove(id) {
     return api
       .delete(`/productType/${id}`)
       .then(response => {
-        if (response.status !== OK_STATUS) {
+        if (!response.data.success ) {
           toast.error(response.data.message);
           dispatch(setLoading(false));
           return dispatch(replace("/productType"));
         }
-
         toast.success("Se eliminó la Categoría con éxito");
         dispatch(success(id));
         dispatch(replace("/productType"));

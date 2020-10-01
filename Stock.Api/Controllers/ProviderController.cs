@@ -18,11 +18,13 @@ namespace Stock.Api.Controllers
     public class ProviderController : ControllerBase
     {
         private ProviderService service;
+        private ProductService productService;
         private readonly IMapper mapper;
 
-        public ProviderController(ProviderService service, IMapper mapper)
+        public ProviderController(ProviderService service, ProductService productService, IMapper mapper)
         {
             this.service = service;
+            this.productService = productService;
             this.mapper = mapper;
         }
 
@@ -129,12 +131,21 @@ namespace Stock.Api.Controllers
         [HttpDelete("{id}")]
         public ActionResult Delete(string id)
         {
-            var provider = this.service.Get(id);
-
+            
             try
-            {          
-                this.service.Delete(provider);
-                return Ok(new { Success = true, Message = "Provider Deleted!", data = id });
+            {       
+                var provider = this.service.Get(id);   
+                IEnumerable<Product> products = this.productService.GetProductsByProviderId(id);
+
+                if (products.Count() == 0) 
+                {
+                    this.service.Delete(provider);
+                    return Ok(new { Success = true, Message = "Provider Deleted!", data = id });
+                }
+                else
+                {
+                    return Ok(new { Success = false, Message = "Provider have Products binded!", data = id });    
+                }
             }
             catch
             {

@@ -1,10 +1,15 @@
-//import { pickBy } from "lodash";
+//import { cloneDeep } from "lodash";
+//import { normalize } from "../../../common/helpers/normalizer";
 import api from "../../../common/api";
 import { apiErrorToast } from "../../../common/api/apiErrorToast";
 
 const initialState = {
   loading: false,
-  productTypes: []
+  productTypes: [],
+  /*
+  ids: [],
+  byId: {}
+  */
 };
 
 /* Action types */
@@ -34,28 +39,52 @@ function handleLoading(state, { loading }) {
 function handleSet(state, { productTypes }) {
   return {
     ...state,
-    productTypes
+    productTypes,
+    /*
+    ids: productTypes.map(productType => productType.id),
+    byId: normalize(productTypes)
+    */
   };
 }
 
 function handleNewProductType(state, { productType }) {
   return {
     ...state,
-    productTypes: state.productTypes.concat(productType)
+    productTypes: state.productTypes.concat(productType),
+    /*
+    ids: state.ids.concat([productType.id]),
+    byId: {
+      ...state.byId,
+      [productType.id]: cloneDeep(productType)
+    }
+    */
   };
 }
 
 function handleUpdateProductType(state, { productType }) {
   return {
     ...state,
-    productTypes: state.productTypes.map(s => (s.id === productType.id ? productType : s))
+    productTypes: state.productTypes.map(s => (s.id === productType.id ? productType : s)),
+    /*
+    byId: { ...state.byId, [productType.id]: cloneDeep(productType) }
+    */
   };
 }
 
 function handleRemoveProductType(state, { id }) {
   return {
     ...state,
-    productTypes: state.productTypes.filter(s => s.id !== id)
+    productTypes: state.productTypes.filter(s => s.id !== id),
+    /*
+    ids: state.ids.filter(productTypeId => productTypeId !== id),
+    byId: Object.keys(state.byId).reduce(
+      (acc, productTypeId) =>
+        productTypeId !== `${id}`
+          ? { ...acc, [productTypeId]: state.byId[productTypeId] }
+          : acc,
+      {}
+    )
+    */
   };
 }
 
@@ -115,6 +144,34 @@ function base(state) {
 export function getLoading(state) {
   return base(state).loading;
 }
+/*
+export function getProductTypesById(state) {
+  return base(state).byId;
+}
+
+export function getProductTypeIds(state) {
+  return base(state).ids;
+}
+
+export function getProductTypeById(state, id) {
+  return getProductTypesById(state)[id] || {};
+}
+
+function makeGetProductTypesMemoized() {
+  let cache;
+  let value = [];
+  return state => {
+    if (cache === getProductTypesById(state)) {
+      return value;
+    }
+    cache = getProductTypesById(state);
+    value = Object.values(getProductTypesById(state));
+    return value;
+  };
+}
+
+export const getProductTypes = makeGetProductTypesMemoized();
+*/
 
 export function getProductTypes(state) {
   return base(state).productTypes;
@@ -123,3 +180,21 @@ export function getProductTypes(state) {
 export function getProductTypeById(state, id) {
   return getProductTypes(state).find(s => s.id === id);
 }
+
+/*
+function makeGetProductTypesMemoized() {
+    let cache;
+    let value = [];
+    return state => {
+      if (cache === getProvidersById(state)) {
+        return value;
+      }
+      cache = getProvidersById(state);
+      value = Object.values(getProvidersById(state));
+      return value;
+    };
+  }
+  
+export const getProviders = makeGetProvidersMemoized();
+*/
+

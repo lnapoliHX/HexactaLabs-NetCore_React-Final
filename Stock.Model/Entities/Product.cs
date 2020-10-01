@@ -41,8 +41,9 @@ namespace Stock.Model.Entities
             this._stock += value;
         }
 
-        //public string ProviderId { get; set; }
-        public List<Provider> Providers { get; set; }
+        public string ProviderId { get; set; }
+        public Provider Provider { get; set; }
+        // public List<Provider> Providers { get; set; }
 
     }
 }
