@@ -6,6 +6,8 @@ import { connect } from "react-redux";
 import { getProductById } from "../../list/index";
 import Presentation from "../presentation";
 import Remove from "../../remove/container";
+import { getProductTypeById } from "../../../productTypes/list";
+import { getProviderById } from "../../../providers/list";
 
 export class ProductViewPage extends Component {
   render() {
@@ -23,8 +25,13 @@ ProductViewPage.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const product = getProductById(state, ownProps.match.params.id);
+  const productType = getProductTypeById(state, product.productTypeId);
+  const provider = getProviderById(state, product.providerId);
+  product.productTypeDesc = productType.description;
+  product.providerName = provider.name;
   return {
-    product: getProductById(state, ownProps.match.params.id)
+    product: product,
   };
 };
 

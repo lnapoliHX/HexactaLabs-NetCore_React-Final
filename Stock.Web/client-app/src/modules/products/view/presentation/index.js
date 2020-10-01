@@ -28,6 +28,14 @@ const ProductView = props => {
         <Col lg="2">Precio de Venta</Col>
         <Col>{props.product.salePrice}</Col>
       </Row>
+      <Row>
+        <Col lg="2">Categoría</Col>
+        <Col>{props.product.productTypeDesc}</Col>
+      </Row>
+      <Row>
+        <Col lg="2">Proveedor</Col>
+        <Col>{props.product.providerName}</Col>
+      </Row>
       <div className="product-view__button-row">
         <Button
           className="product-form__button"
