@@ -1,8 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-
 import { FaEdit, FaTrash, FaSearch, FaShoppingCart } from "react-icons/fa";
+
+import InputField from "../../../../components/inputs/InputField";
 import { Input, Button, Container, Row, Col } from "reactstrap";
 
 const renderToolbar = ({ value }) => {
@@ -19,7 +20,7 @@ const renderToolbar = ({ value }) => {
   );
 
   let removeButton = (
-    <Link className="product-list__button" to={`/product/remove/${value}`}>
+    <Link className="product-list__button" onClick = {() => localStorage.removeItem(value)} to={`/cart`}>
       <FaTrash className="product-list__button-icon" />
     </Link>
   );
@@ -34,29 +35,17 @@ const renderToolbar = ({ value }) => {
 };
 
 
-const RenderPurchase = ({ value: productId }) => {
+
+
+
+const RenderCant = ({ value: productId }) => {
   let valor;
   let purchaseField = (
     <Container>
       <Col>
         <Row>
-          <Col md="9">
-            <Input
-              label="Cantidad"
-              name="productId"
-              type="text"
-              id="prodId"
-              onChange={e => {
-                valor = e.target.value
-              }}
-            />
-          </Col>         
-          <Col md="3">
-            <Link className="product-list__button" 
-              onClick={() => {(localStorage.setItem(productId, JSON.stringify({ id: productId, valor })));}}
-              to={`/cart`}>
-              <FaShoppingCart className="product-list__button-icon" />
-            </Link>
+          <Col>
+          <h5>{ JSON.parse((Object.entries(localStorage).find(lsk => lsk[0] === productId ))[1]).valor }</h5>
           </Col>
         </Row>
       </Col>
@@ -69,6 +58,8 @@ const RenderPurchase = ({ value: productId }) => {
     </span>
   );
 };
+
+
 
 const HeaderComponent = props => {
   return (
@@ -92,20 +83,21 @@ const columns = [
     Cell: props => props.value
   },
   {
-    Header: <HeaderComponent title="Proovedor" />,
-    accessor: "providerName",
+    Header: <HeaderComponent title="Precio" />,
+    accessor: "salePrice",
     Cell: props => props.value
   },
   {
-    Header: <HeaderComponent title="Compra" />,
+    Header: <HeaderComponent title="Cantidad" />,
     accessor: "id",
-    Cell: RenderPurchase
+    Cell: RenderCant
   },
   {
     Header: <HeaderComponent title="Acciones" />,
     accessor: "id",
     Cell: renderToolbar
   }
+
 ];
 
 HeaderComponent.propTypes = {
@@ -117,8 +109,6 @@ renderToolbar.propTypes = {
   value: PropTypes.string.isRequired
 };
 
-RenderPurchase.propTypes = {
-  value: PropTypes.string.isRequired
-};
+
 
 export default columns;
