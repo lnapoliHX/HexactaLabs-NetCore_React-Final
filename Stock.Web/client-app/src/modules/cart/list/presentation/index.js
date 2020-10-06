@@ -1,30 +1,31 @@
 import React from "react";
-import PropTypes from "prop-types";
-import ReactTable from "react-table";
+import { FaShoppingCart } from "react-icons/fa";
 import { Container, Row, Col, Button } from "reactstrap";
-import { FaPlus } from "react-icons/fa";
 import columns from "./ColumnsConfig";
+import ReactTable from "react-table";
+
+import PropTypes from "prop-types";
 
 const Presentation = props => {
-  console.log("props data");
+  console.log("Holaaa data:");
   console.log(props.data);
   return (
     <Container fluid>
       <Row className="my-1">
         <Col>
-          <h1>Categorías</h1>
+          <h1>Detalle de compra</h1>
         </Col>
       </Row>
       <Row className="my-1">
         <Col>
           <Button
-            className="product__button"
+            className="cart__button"
             color="primary"
-            aria-label="Agregar"
-            onClick={() => props.push(props.urls.create)}
+            aria-label="Finalizar compra"
+            onClick={() => props.push(props.urls.order)}
           >
-            <FaPlus className="product__button-icon" />
-            AGREGAR
+            <FaShoppingCart className="cart__button-icon" />
+            Finalizar compra
           </Button>
         </Col>
       </Row>
@@ -33,7 +34,7 @@ const Presentation = props => {
           <ReactTable
             {...props}
             data={props.data}
-            pages={props.pages}
+            pages={props.pages} 
             loading={props.dataLoading}
             columns={columns}
             defaultPageSize={props.defaultPageSize}

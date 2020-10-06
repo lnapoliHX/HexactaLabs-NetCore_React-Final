@@ -103,9 +103,9 @@ export function setProducts(products) {
   };
 }
 
-
 export function fetchAll() {
-  return function (dispatch) {
+
+    return function (dispatch) {
     dispatch(setLoading(true));
     return Promise.all([
       api.get("/product"),
