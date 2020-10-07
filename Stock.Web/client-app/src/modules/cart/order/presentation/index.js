@@ -20,7 +20,7 @@ const OrderCart = ({ order, goBack }) => {
 };
 
 OrderCart.propTypes = {
-  remove: PropTypes.func.isRequired,
+  order: PropTypes.func.isRequired,
   goBack: PropTypes.func.isRequired
 };
 

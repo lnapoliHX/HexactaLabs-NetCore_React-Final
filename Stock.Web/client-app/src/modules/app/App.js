@@ -31,6 +31,7 @@ const App = props => (
       <Route path="/product-type" component={ProductTypePage} />
       <Route path="/store" component={StorePage} />
       <Route path="/cart" component={CartPage} />
+      <Route path="/checkout" component={CartPage} />
     </Layout>
     <ToastContainer autoClose={2000} />
   </Private>

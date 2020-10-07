@@ -11,9 +11,7 @@ import Spinner from "../../../components/loading/spinner";
 
 export class CartPage extends Component {
   componentDidMount() {
-    //fetchAll();
     this.props.fetchAll();
-    console.log(this.props)
   }
 
   render() {

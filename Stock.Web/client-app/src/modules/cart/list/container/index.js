@@ -3,12 +3,10 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
 import Cart from "../presentation/index";
-import { getLoading, getCart, fetchAll } from "../index";
+import { getCart, fetchAll } from "../index";
 
 export class CartsPage extends Component {
   render() {
-    console.log("data cartspage")
-    console.log(this.props.cart)
     return (
       <Cart
         {...this.props}

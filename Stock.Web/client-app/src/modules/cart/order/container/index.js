@@ -9,7 +9,7 @@ class OrderCart extends React.Component {
   render() {
     return (
       <Order
-        order={() => this.props.order(this.props.match.params.id)}
+        order={() => this.props.order()}
         goBack={this.props.goBack}
       />
     );

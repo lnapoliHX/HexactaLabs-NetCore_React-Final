@@ -147,7 +147,7 @@ namespace Stock.Api.Controllers
         /// <param name="id">Identificador del producto</param>
         /// <param name="value">La cantidad a descontar</param>
         [HttpPut("stock/descontar/{id}")]
-        public void DescontarStock(string id, [FromBody] int value)
+        public void DescontarStock(string id, int value)
         {
             this.service.DescontarStock(id, value);
         }
@@ -158,7 +158,7 @@ namespace Stock.Api.Controllers
         /// <param name="id">Identificador del producto</param>
         /// <param name="value">La cantidad a sumar</param>
         [HttpPut("stock/sumar/{id}")]
-        public void SumarStock(string id, [FromBody] int value)
+        public void SumarStock(string id, int value)
         {
             this.service.SumarStock(id, value);
         }

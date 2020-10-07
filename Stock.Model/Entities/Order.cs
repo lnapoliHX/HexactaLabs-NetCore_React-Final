@@ -9,7 +9,7 @@ namespace Stock.Model.Entities
     {
         public string Id { get; set; }
 
-        public List<Product> Products { get; set; }
+        public Dictionary<string,int> Quantity { get; set;}
 
     }
 }

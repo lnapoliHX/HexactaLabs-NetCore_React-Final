@@ -1,4 +1,3 @@
-import api from "../../../common/api";
 import { apiErrorToast } from "../../../common/api/apiErrorToast";
 import { setLoading, ActionTypes } from "../list";
 import { replace } from "connected-react-router";
@@ -12,32 +11,21 @@ function success(id) {
   };
 }
 
-function handleError(dispatch, error) {
-  apiErrorToast(error);
-  
-  return dispatch(setLoading(false));
-}
-
 export function remove(id) {
   return function(dispatch) {
     dispatch(setLoading(true));
-    return api
-      .delete(`/product/${id}`)
-      .then((response) => {
-        if (!response.data.success) {
-          var error = {response: {data: {Message: response.data.message}}};
-
-          return handleError(dispatch, error);
-        }
-
+    let cartStored = localStorage.getItem('cart');
+      if (cartStored !== null){
+        cartStored = JSON.parse(cartStored);
+        delete cartStored[id];
         dispatch(success(id));
         dispatch(setLoading(false));
-        toast.success("Se eliminó el producto con éxito");
-        
-        return dispatch(replace("/product"));
-      })
-      .catch(error => {
-        return handleError(dispatch, error);
-      });
+        localStorage.setItem('cart', JSON.stringify(cartStored));
+        toast.success("Se eliminó el producto con éxito");        
+        return dispatch(replace("/cart"));
+      } else  {
+        apiErrorToast("Error");  
+        return dispatch(setLoading(false));
+      };
   };
 }

@@ -86,25 +86,17 @@ export function setProducts(products) {
   };
 }
 
-function getStock(id, products){
-  api.get("/product/stock/"+id).then(
+export function getStockById(id){
+  return api.get("/product/stock/"+id).then(
     response => {
-      products[id] = {
-        ...products[id],
-        stock: response.data.value
-      };
+      return response.data.value    
     }).catch(error =>{
-      apiErrorToast(error);
-      products[id] = {
-        ...products[id],
-        stock: 0
-      };
+      return 0;
     });
 }
 
 export function fetchAll() {
-    return function (dispatch) {
-    //return dispatch => {
+    return function (dispatch) {    
       dispatch(setLoading(true));
       let cartStored = localStorage.getItem('cart');
       if (cartStored !== null){
@@ -129,25 +121,35 @@ export function fetchAll() {
                 }
             });
           });
-        });
-        return getValues.then(value => { 
-          console.log("value thennn");
-          console.log(value);       
+        });        
+        return getValues.then(value => {             
           dispatch(setProducts(value));
-          console.log("entro hasta setloadin");
           dispatch(setLoading(false));
-        }).catch(error=>{
-          console.log("value value catchhh");
-          console.log(error);   
+          checkoutVerify(value);
+        }).catch(error=>{  
           apiErrorToast(error)
+          dispatch(setProducts("{}"));
           return dispatch(setLoading(false));
-          console.log("entro hasta setloadincatchs");
-        });
-        
+        });       
+      } else {
+        dispatch(setProducts([]));
+        dispatch(setLoading(false));
       }
   }
 } 
-
+function checkoutVerify(value){
+  if(localStorage.getItem('checkout') === "ORDER"){
+    localStorage.removeItem('cart');
+    localStorage.setItem('checkout', "false");
+    api.post("/order/",{id:""}).then(orderCreated => {
+      const id = orderCreated.data.data.id;
+      const keys = Object.keys(value);
+      keys.forEach(key => {
+          api.post("/order/addProduct/"+id+"?productId="+value[key]["id"]+"&quantity="+value[key]["stock"])
+      });
+    });
+  }          
+}
 /* Selectors */
 function base(state) {
   return state.cart.list;
@@ -177,7 +179,6 @@ export function makeGetProductsMemoized() {
       return value;
     }
     cache = getProductsById(state);
-    console.log(cache);
     value = Object.values(getProductsById(state));
     return value;
   };

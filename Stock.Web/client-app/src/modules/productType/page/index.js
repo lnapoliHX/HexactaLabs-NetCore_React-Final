@@ -14,7 +14,6 @@ import { getLoading, fetchAll } from "../list";
 export class ProductsPage extends Component {
   componentDidMount() {
     this.props.fetchAll();
-    console.log(this.props)
   }
 
   render() {

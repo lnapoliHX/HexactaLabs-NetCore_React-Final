@@ -90,7 +90,6 @@ export function fetchAll() {
     return api
       .get("/producttype")
       .then(response => {
-        console.log(response.data);
         dispatch(setProductTypes(response.data));
         return dispatch(setLoading(false));
       })

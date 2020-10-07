@@ -6,8 +6,6 @@ import { FaPlus } from "react-icons/fa";
 import columns from "./ColumnsConfig";
 
 const Presentation = props => {
-  console.log("props data");
-  console.log(props.data);
   return (
     <Container fluid>
       <Row className="my-1">
