@@ -4,6 +4,9 @@ import { apiErrorToast } from "../../../common/api/apiErrorToast";
 import { normalize } from "../../../common/helpers/normalizer";
 import { setProviders } from "../../providers/list";
 import { setProductTypes } from "../../productType/list";
+import { setCompras } from "../../compras/list";
+import { replace } from "connected-react-router";
+import { toast } from "react-toastify";
 
 const initialState = {
   loading: false,
@@ -74,7 +77,6 @@ function handleSumStockProduct(state, { product }) {
   return {
     ...state,
     stock: normalize(product),
-    // byId: { ...state.byId, [product.id]: cloneDeep(product) },
   };
 }
 
@@ -129,11 +131,13 @@ export function fetchAll() {
       api.get("/product"),
       api.get("/producttype"),
       api.get("/provider"),
+      api.get("/compra"),
     ])
-      .then(([products, types, providers]) => {
+      .then(([products, types, providers, compras]) => {
         dispatch(setProducts(products.data));
         dispatch(setProductTypes(types.data));
         dispatch(setProviders(providers.data));
+        dispatch(setCompras(compras.data));
         dispatch(setLoading(false));
       })
       .catch((error) => {
@@ -179,6 +183,74 @@ export function fetchAllTypes() {
         return dispatch(setLoading(false));
       });
   };
+}
+
+function verificarStock(detalles, total) {
+  let nuevoDetalles = [];
+  let nuevoTotal = 0;
+
+  for (let det of detalles) {
+    let cantidad = parseInt(det.Cantidad); // cantidad pedida
+
+    if (det.stock >= cantidad) {
+      nuevoDetalles.push(det);
+      nuevoTotal = nuevoTotal + cantidad * det.salePrice;
+    }
+  }
+
+  return { TotalPrice: nuevoTotal, detalles: nuevoDetalles };
+}
+
+export function pagarCuenta(detalles, total) {
+  let compraV = verificarStock(detalles, total);
+
+  if (compraV.detalles.length > 0) {
+    let compra = {
+      Fecha: new Date(),
+      TotalPrice: compraV.TotalPrice,
+      detalles: compraV.detalles,
+    };
+
+    return function (dispatch) {
+      dispatch(setLoading(true));
+      return api
+        .post(`/compra`, compra)
+        .then((response) => {
+          console.log(compra);
+          if (response.data.success === true) {
+            for (let det of compra.detalles) {
+              localStorage.removeItem(det.id);
+            }
+            dispatch(setLoading(false));
+            return dispatch(replace("/compras"));
+          }
+          var error = {
+            response: { data: { Message: response.data.message } },
+          };
+          return error;
+        })
+        .catch((error) => {
+          apiErrorToast(error);
+        });
+    };
+  } else {
+    var error = {
+      response: {
+        data: {
+          Message:
+            "El stock de ningun producto alcanza para realizar la compra",
+        },
+      },
+    };
+    console.log(error);
+
+    return function (dispatch) {
+      toast.error(
+        "El stock de ningun producto alcanza para realizar la compra"
+      );
+      return dispatch(replace("/carrito"));
+    };
+  }
 }
 
 /* Selectors */

@@ -10,7 +10,7 @@ const AUTH_LOGOUT = "AUTH/LOGOUT";
 const initialState = {
   loading: false,
   authenticated: false,
-  errorMessage: null
+  errorMessage: null,
 };
 
 export default function reducer(state = initialState, action = {}) {
@@ -24,7 +24,7 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         authenticated: false,
-        errorMessage: action.error
+        errorMessage: action.error,
       };
     case AUTH_CANCEL:
       return { ...state, loading: false, authenticated: false };
@@ -35,7 +35,7 @@ export default function reducer(state = initialState, action = {}) {
   }
 }
 
-export const login = ({ username, password }) => dispatch => {
+export const login = ({ username, password }) => (dispatch) => {
   dispatch({ type: AUTH_REQUEST });
 
   if (username === password && username === "admin") {
@@ -46,7 +46,7 @@ export const login = ({ username, password }) => dispatch => {
     dispatch({
       type: AUTH_ERROR,
       error:
-        "Las credenciales no son correctas, intente nuevamente. (admin,admin)"
+        "Las credenciales no son correctas, intente nuevamente. (admin,admin)",
     });
   }
 
@@ -64,25 +64,26 @@ export const login = ({ username, password }) => dispatch => {
   //     });
 };
 
-export const signup = ({ username, password }) => dispatch => {
+export const signup = ({ username, password }) => (dispatch) => {
   dispatch({ type: AUTH_REQUEST });
 
   const url = "/public/sign-up";
 
   api
     .post(url, { username: username, password: password })
-    .then(response => dispatch(login({ username, password })))
+    .then((response) => dispatch(login({ username, password })))
     .catch(() => {
       //toast.error('Ocurrió un error');
       return dispatch({
         type: AUTH_ERROR,
-        error: "Las credenciales no son correctas, intente nuevamente."
+        error: "Las credenciales no son correctas, intente nuevamente.",
       });
     });
 };
 
-export const logout = () => dispatch => {
+export const logout = () => (dispatch) => {
   localStorage.removeItem("JWT_LOGIN");
+  localStorage.clear();
   dispatch(replace("/"));
   window.location.reload();
 };
