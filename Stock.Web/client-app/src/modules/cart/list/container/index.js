@@ -6,7 +6,7 @@ import { getProducts, fetchByFilters, fetchAll } from "../index";
 import { getProvidersById } from "../../../providers/list";
 import { getById } from "../../../productType/list";
 
-export class ProductsPage extends Component {
+export class CartsPage extends Component {
   constructor() {
     super();
     this.state = {
@@ -70,4 +70,4 @@ const mapDispatchToProps = {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProductsPage);
+)(CartsPage);
