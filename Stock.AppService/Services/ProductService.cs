@@ -25,12 +25,18 @@ namespace Stock.AppService.Services
             return producto.Stock;
         }
 
-        public void DescontarStock(string idProducto, int value)
+        public bool DescontarStock(string idProducto, int value)
         {
+            try { 
             var producto = this.Repository.GetById(idProducto);
             producto.DescontarStock(value);
             this.Repository.Update(producto);
-        }
+            return true;
+        }catch(Exception e)
+            {
+                return false;
+            }
+}
 
         public void SumarStock(string idProducto, int value)
         {
