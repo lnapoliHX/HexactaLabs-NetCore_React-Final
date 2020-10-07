@@ -26,6 +26,12 @@ const ProductForm = props => {
         type="number"
         parse={v => Number.parseInt(v)}
       />
+      <Field 
+        label="Stock"
+        name="stock"
+        component={InputField}
+        type="number"
+      />
       <Field
         name="productTypeId"
         label="Tipo de producto"

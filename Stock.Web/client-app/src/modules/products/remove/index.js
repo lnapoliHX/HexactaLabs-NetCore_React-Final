@@ -3,6 +3,7 @@ import { apiErrorToast } from "../../../common/api/apiErrorToast";
 import { setLoading, ActionTypes } from "../list";
 import { replace } from "connected-react-router";
 import { toast } from "react-toastify";
+import { localRemove } from "../../localstorage";
 
 /* Actions */
 function success(id) {
@@ -30,6 +31,7 @@ export function remove(id) {
           return handleError(dispatch, error);
         }
 
+        localRemove(id);
         dispatch(success(id));
         dispatch(setLoading(false));
         toast.success("Se eliminó el producto con éxito");

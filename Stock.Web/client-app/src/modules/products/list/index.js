@@ -103,7 +103,6 @@ export function setProducts(products) {
   };
 }
 
-
 export function fetchAll() {
   return function (dispatch) {
     dispatch(setLoading(true));
