@@ -3,7 +3,7 @@ import {FaShoppingCart } from "react-icons/fa";
 import { Container, Row, Col, Button } from "reactstrap";
 import columns from "./ColumnsConfig";
 import ReactTable from "react-table";
-import {checkout,getLoading} from "../../list";
+import {finalizarCompra,getLoading} from "../../list";
 import { connect } from "react-redux";
 
 
@@ -79,7 +79,7 @@ export function crearCarrito(props) {
 
 
 export function comprar(props){
-  props.checkout(crearCarrito(props));
+  props.finalizarCompra(crearCarrito(props));
 }
 
 Presentation.propTypes = {
@@ -104,7 +104,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  checkout
+  finalizarCompra
 };
 
 export default connect(

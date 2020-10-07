@@ -151,14 +151,13 @@ export function success(cart) {
   };
 }
 
-export function checkout(cart) {
+export function finalizarCompra(cart) {
  
   return async function (dispatch) {
     dispatch(setLoading(true));
     try {
       const response = await api.post(`product/comprar`, cart);
       if (!response.data.success) {
-        
         var error = { response: { data: { Message: response.data.message } } };
         return handleError(dispatch, error);
       }
@@ -166,8 +165,6 @@ export function checkout(cart) {
       response.data.data.forEach(element => {
        localStorage.removeItem(element.id);
       });
-      
-
       dispatch(setLoading(false));
       toast.success("La compra se finalizo");
       return dispatch(replace("/cart/view"));
