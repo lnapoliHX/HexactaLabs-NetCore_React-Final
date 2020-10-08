@@ -1,6 +1,6 @@
 import React from "react";
-import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 import PropTypes from "prop-types";
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from "reactstrap";
 
 const ElementRemove = ({ remove, goBack }) => {
   return (
@@ -9,7 +9,7 @@ const ElementRemove = ({ remove, goBack }) => {
       <ModalBody>¿Desea eliminar este producto?</ModalBody>
       <ModalFooter>
         <Button color="danger" onClick={remove}>
-          Sí
+          Si
         </Button>
         <Button color="secondary" onClick={goBack}>
           No
@@ -24,6 +24,6 @@ ElementRemove.propTypes = {
   goBack: PropTypes.func.isRequired
 };
 
-ElementRemove.displayName = "ElementRemove";
+ElementRemove.displayName = "ProductRemove";
 
 export default ElementRemove;

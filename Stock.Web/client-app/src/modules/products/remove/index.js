@@ -1,8 +1,10 @@
-import api from "../../../common/api";
-import { apiErrorToast } from "../../../common/api/apiErrorToast";
-import { setLoading, ActionTypes } from "../list";
 import { replace } from "connected-react-router";
 import { toast } from "react-toastify";
+import { setLoading, ActionTypes } from "../list";
+import api from "../../../common/api";
+import { apiErrorToast } from "../../../common/api/apiErrorToast";
+
+const OK_STATUS = 200;
 
 /* Actions */
 function success(id) {
@@ -12,32 +14,26 @@ function success(id) {
   };
 }
 
-function handleError(dispatch, error) {
-  apiErrorToast(error);
-  
-  return dispatch(setLoading(false));
-}
-
 export function remove(id) {
-  return function(dispatch) {
+  return function (dispatch) {
     dispatch(setLoading(true));
     return api
       .delete(`/product/${id}`)
-      .then((response) => {
-        if (!response.data.success) {
-          var error = {response: {data: {Message: response.data.message}}};
-
-          return handleError(dispatch, error);
+      .then(response => {
+        if (response.status !== OK_STATUS) {
+          toast.error(response.data.message);
+          dispatch(setLoading(false));
+          return dispatch(replace("/product"));
         }
 
-        dispatch(success(id));
-        dispatch(setLoading(false));
         toast.success("Se eliminó el producto con éxito");
-        
-        return dispatch(replace("/product"));
+        dispatch(success(id));
+        dispatch(replace("/product"));
+        return dispatch(setLoading(false));
       })
       .catch(error => {
-        return handleError(dispatch, error);
+        apiErrorToast(error);
+        return dispatch(setLoading(false));
       });
   };
 }

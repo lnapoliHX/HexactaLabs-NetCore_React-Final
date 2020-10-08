@@ -1,8 +1,8 @@
+import { toast } from "react-toastify";
+import { goBack } from "connected-react-router";
 import api from "../../../common/api";
 import { apiErrorToast } from "../../../common/api/apiErrorToast";
 import { setLoading, ActionTypes } from "../list";
-import { toast } from "react-toastify";
-import { goBack } from "connected-react-router";
 
 /* Actions */
 function success(product) {
@@ -17,11 +17,16 @@ export function update(product) {
     dispatch(setLoading(true));
     return api
       .put(`/product/${product.id}`, product)
-      .then(() => {
-        toast.success("El producto se editó con exito");
-        dispatch(success(product));
-        dispatch(setLoading(false));
-        return dispatch(goBack());
+      .then(response => {
+        if (response.data.success) {
+          toast.success("El producto se editó con éxito");
+          dispatch(success(response.data.product));
+          dispatch(setLoading(false));
+          return dispatch(goBack()); 
+        } else {
+          toast.error("El producto ya existe.");
+          return dispatch(setLoading(false));  
+        }
       })
       .catch(error => {
         apiErrorToast(error);

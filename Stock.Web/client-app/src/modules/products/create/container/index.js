@@ -1,21 +1,34 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import { goBack } from "connected-react-router";
+import { create } from "../index";
+import Form from "../../form/presentation";
+import PropTypes from "prop-types";
 import { Container, Row, Col, Alert } from "reactstrap";
 import { Link } from "react-router-dom";
-import { goBack } from "connected-react-router";
-import Form from "../../form/presentation";
-import { create } from "../../create";
-import { getProductTypes } from "../../../productType/list";
+import { getProductTypes } from "../../../productTypes/list";
 import { getProviders } from "../../../providers/list";
 
-const Create = ({
-  create: onSubmit,
-  goBack: onCancel,
-  productTypeOptions,
-  providerOptions,
-  initialValues
-}) => {
+//const Create = (props) => {
+  
+const Create = (
+    { 
+      create: onSubmit, 
+      goBack: onCancel,
+      productTypeOptions,
+      providerOptions,
+      initialValues
+    }) => {
+/*
+  const onSubmit = props.create;
+  const onCancel = props.goBack;
+  const productTypeOptions = props.productTypeOptions;
+  const providerOptions = props.providerOptions;
+  const initialValues = props.initialValues;
+*/
+
+//  console.log('products.create.container: ', props);
+
   return (
     <Container fluid>
       <Row>
@@ -31,7 +44,8 @@ const Create = ({
             </Alert>
           </Col>
         </Row>
-      ) : null}
+        ) : 
+        null}
       {!providerOptions.length ? (
         <Row>
           <Col>
@@ -41,16 +55,17 @@ const Create = ({
             </Alert>
           </Col>
         </Row>
-      ) : null}
+        ) : 
+        null}
       <Row>
         <Col>
-          <Form
+          <Form 
             initialValues={initialValues}
             productTypeOptions={productTypeOptions}
             providerOptions={providerOptions}
-            onSubmit={onSubmit}
-            handleCancel={onCancel}
-          />
+            onSubmit={onSubmit} 
+            handleCancel={onCancel} 
+            />
         </Col>
       </Row>
     </Container>
@@ -58,11 +73,11 @@ const Create = ({
 };
 
 Create.propTypes = {
+  initialValues: PropTypes.object.isRequired,
   productTypeOptions: PropTypes.array.isRequired,
   providerOptions: PropTypes.array.isRequired,
   create: PropTypes.func.isRequired,
   goBack: PropTypes.func.isRequired,
-  initialValues: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => {
@@ -70,14 +85,19 @@ const mapStateToProps = state => {
   const providers = getProviders(state);
   return {
     productTypeOptions: productTypes.map(pt => ({
+      id: pt.id,
       label: pt.description,
       value: pt.id
     })),
     providerOptions: providers.map(provider => ({
+      id: provider.id,
       label: provider.name,
       value: provider.id
     })),
     initialValues: {
+      costPrice: 0.0,
+      salePrice: 0.0,
+      stock: 0,
       productTypeId: productTypes.length ? productTypes[0].id : "default",
       providerId: providers.length ? providers[0].id : "default"
     }
@@ -86,10 +106,12 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   create,
-  goBack
+  goBack,
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Create);
+
+

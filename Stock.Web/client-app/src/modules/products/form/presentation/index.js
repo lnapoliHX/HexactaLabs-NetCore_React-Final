@@ -3,43 +3,61 @@ import PropTypes from "prop-types";
 import { Field, reduxForm } from "redux-form";
 import { Form, Button } from "reactstrap";
 import Validator from "../../../../common/helpers/YupValidator";
-import SelectField from "../../../../components/inputs/SelectField";
-import InputField from "../../../../components/inputs/InputField";
+import InputField from "../../../../components/inputs/InputField.js";
+import SelectField from "../../../../components/inputs/SelectField.js";
+//import ProductTypeDropDownPage from "../../../productTypes/dropdown/page/index"
 import schema from "../validation";
 
 const ProductForm = props => {
-  const { handleSubmit, handleCancel } = props;
+  const { handleSubmit, handleCancel, } = props;
+
   return (
     <Form onSubmit={handleSubmit}>
       <Field label="Nombre" name="name" component={InputField} type="text" />
-      <Field
-        label="Precio de costo"
-        name="costPrice"
-        component={InputField}
-        type="number"
-        parse={v => Number.parseInt(v)}
-      />
-      <Field
-        label="Precio de venta"
-        name="salePrice"
-        component={InputField}
-        type="number"
-        parse={v => Number.parseInt(v)}
-      />
-      <Field
-        name="productTypeId"
-        label="Tipo de producto"
+      <Field label="Costo" name="costPrice" component={InputField} type="number" 
+              parse={v => {
+                if (isNaN(Number.parseFloat(v)) === true)
+                  return ''
+                else 
+                  return Number.parseFloat(v)
+              }} />
+      <Field label="Precio de Venta" name="salePrice" component={InputField} type="number" 
+              parse={v => {
+                if (isNaN(Number.parseFloat(v)) === true)
+                  return ''
+                else 
+                  return Number.parseFloat(v)
+              }} />
+      <Field label="Stock" name="stock" component={InputField} type="number" 
+              parse={v => {
+                if (isNaN(Number.parseFloat(v)) === true)
+                  return ''
+                else 
+                  return Number.parseFloat(v)
+              }} />
+      <Field label="Categoría" name="productTypeId" component={SelectField} type="select"
+              options={props.productTypeOptions}/>
+      <Field label="Proveedor" name="providerId" component={SelectField} type="select"
+              options={props.providerOptions}/>
+
+      {/*<ProductTypeDropDownPage  />
+      */}
+      {/*
+      <ProductTypeDropDown
+        label="Categoría"
+        name="productTypeDesc"
         component={SelectField}
         type="select"
-        options={props.productTypeOptions}
+        options={productTypesOptions}
       />
       <Field
-        name="providerId"
-        label="Proveedor"
+        label="Proveedores"
+        name="providers"
         component={SelectField}
         type="select"
-        options={props.providerOptions}
+        multiple="multiple"
       />
+      */}
       <Button className="product-form__button" color="primary" type="submit">
         Guardar
       </Button>
@@ -57,9 +75,7 @@ const ProductForm = props => {
 
 ProductForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
-  handleCancel: PropTypes.func.isRequired,
-  productTypeOptions: PropTypes.array.isRequired,
-  providerOptions: PropTypes.array.isRequired
+  handleCancel: PropTypes.func.isRequired
 };
 
 export default reduxForm({

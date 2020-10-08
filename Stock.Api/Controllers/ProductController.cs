@@ -1,13 +1,14 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Stock.Api.DTOs;
-using Stock.AppService.Services;
-using Stock.Model.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Stock.Api.DTOs;
 using Stock.Api.Extensions;
+using Stock.AppService.Services;
+using Stock.Model.Entities;
 
 namespace Stock.Api.Controllers
 {
@@ -16,8 +17,8 @@ namespace Stock.Api.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly ProductService service;
-        private readonly ProductTypeService productTypeService;
+        private ProductService service;
+        private ProductTypeService productTypeService;
         private readonly IMapper mapper;
 
         public ProductController(ProductService service, ProductTypeService productTypeService, IMapper mapper)
@@ -28,69 +29,133 @@ namespace Stock.Api.Controllers
         }
 
         /// <summary>
-        /// Permite recuperar todas las instancias
+        /// Permite agregar un nuevo Producto al repositorio
         /// </summary>
-        /// <returns>Una colección de instancias</returns>
+        /// <param name="value">Propiedades del Producto</param>
+        /// <returns>Exito o Error y el Producto que se intentó crear</returns>
+        [HttpPost]
+        public ActionResult Post([FromBody] ProductDTO value)
+        {
+            Console.WriteLine(value);
+            TryValidateModel(value);
+
+            try
+            {
+                var product = this.mapper.Map<Product>(value);
+                product.ProductType = this.productTypeService.Get(value.ProductTypeId.ToString());
+                product.AddStock(value.Stock);
+                this.service.Create(product);
+                value.Id = product.Id;
+                
+                return Ok(new { Success = true, Message = "Product Created!", Product = value });
+            }
+            catch
+            {
+                return Ok(new { Success = false, 
+                                Message = "The name is already in use!!!", Product = value });
+            }
+        }
+
+        /// <summary>
+        /// Permite recuperar todos los Productos existentes en el repositorio
+        /// </summary>
+        /// <returns>Una colección de Productos o un código en caso de error</returns>
         [HttpGet]
         public ActionResult<IEnumerable<ProductDTO>> Get()
         {
             try
             {
                 var result = this.service.GetAll();
-                return this.mapper.Map<IEnumerable<ProductDTO>>(result).ToList();
+                return Ok(new {Success = true, Message = "List of all Products", 
+                                Products = this.mapper.Map<IEnumerable<ProductDTO>>(result).ToList()} );
             }
-            catch(Exception)
+            catch (Exception)
             {
-                return StatusCode(500);
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
         /// <summary>
-        /// Permite recuperar una instancia mediante un identificador
+        /// Permite recuperar las propiedades de un Producto mediante su Id
         /// </summary>
-        /// <param name="id">Identificador de la instancia a recuperar</param>
-        /// <returns>Una instancia</returns>
+        /// <param name="id">Identificador del Producto a recuperar</param>
+        /// <returns>Una instancia de Producto o un código en caso de error</returns>
         [HttpGet("{id}")]
         public ActionResult<ProductDTO> Get(string id)
         {
-            return this.mapper.Map<ProductDTO>(this.service.Get(id));
-        }
-
-        /// <summary>
-        /// Permite crear una nueva instancia
-        /// </summary>
-        /// <param name="value">Una instancia</param>
-        [HttpPost]
-        public ActionResult Post([FromBody] ProductDTO value)
-        {
-            TryValidateModel(value);
-
-            try {
-                var product = this.mapper.Map<Product>(value);
-                product.ProductType = this.productTypeService.Get(value.ProductTypeId.ToString());
-                this.service.Create(product);
-                value.Id = product.Id;
-                return Ok(new { Success = true, Message = "", data = value });
-            } catch {
-                return Ok(new { Success = false, Message = "The name is already in use" });
+            try
+            {
+                var result = this.service.Get(id);
+                return Ok(new { Success = true, Message = "Product Obtained!", 
+                        Product = this.mapper.Map<ProductDTO>(result) });
+            }
+            catch (Exception)
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
             }
         }
 
         /// <summary>
-        /// Permite editar una instancia
+        /// Permite actualizar las propiedades de un Producto
         /// </summary>
-        /// <param name="id">Identificador de la instancia a editar</param>
-        /// <param name="value">Una instancia con los nuevos datos</param>
+        /// <param name="id">Identificador del Producto a actualizar</param>
+        /// <param name="value">Propiedades del Producto</param>
+        /// <returns>Exito o Error y el Producto que se intentó actualizar</returns>
         [HttpPut("{id}")]
-        public void Put(string id, [FromBody] ProductDTO value)
+        public ActionResult Put(string id, [FromBody] ProductDTO value)
         {
-            var product = this.service.Get(id);
             TryValidateModel(value);
-            this.mapper.Map<ProductDTO, Product>(value, product);
-            product.ProductType = this.productTypeService.Get(value.ProductTypeId.ToString());
-            this.service.Update(product);
+
+            var product = this.service.Get(id);
+            try
+            {
+                //var dtoStock = value.Stock;
+                //var originalProductStock = product.Stock;
+                this.mapper.Map<ProductDTO, Product>(value, product);
+                //var afterMapperProductStock = product.Stock;
+                product.AddStock(value.Stock - product.Stock);
+                //var afterAddStockProductStock = product.Stock;
+                this.service.Update(product);
+                return Ok(new { Success = true, Message = "Product Updated!", 
+                                //ProductStock_Original = originalProductStock, 
+                                //ProductStock_AfterMapper = afterMapperProductStock,
+                                //ProductStock_AfterAddStock = afterAddStockProductStock,
+                                //DtoStock = dtoStock, 
+                                Product = value });
+            }
+            catch
+            {
+                return Ok(new { Success = false, 
+                                Message = "The name is already in use!!!", Product = value });
+            }
         }
 
+        /// <summary>
+        /// Permite borrar un Producto
+        /// </summary>
+        /// <param name="id">Identificador del Producto a borrar</param>
+        /// <returns>Exito y el Id del Producto eliminada o un codigo en caso de error</returns>
+        [HttpDelete("{id}")]
+        public ActionResult Delete(string id)
+        {
+            var product = this.service.Get(id);
+
+            try
+            {          
+                this.service.Delete(product);
+                return Ok(new { Success = true, Message = "Product Deleted!", data = id });
+            }
+            catch
+            {
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// Permite realizar la búsqueda de Productos
+        /// </summary>
+        /// <param name="model">Objeto que contiene los parametros de Busquesda</param>
+        /// <returns>Lista de los Productos filtradas</returns>
         [HttpPost("search")]
         public ActionResult Search([FromBody] ProductSearchDTO model)
         {
@@ -103,86 +168,9 @@ namespace Stock.Api.Controllers
                     model.Condition.Equals(ActionDto.AND));
             }
 
-            if(!string.IsNullOrWhiteSpace(model.Brand))
-            {
-                filter = filter.AndOrCustom(
-                    x => x.ProductType.Description.ToUpper().Contains(model.Brand.ToUpper()),
-                    model.Condition.Equals(ActionDto.AND));
-            }
-
             var products = this.service.Search(filter);
-            return Ok(products);
-        }
-
-        /// <summary>
-        /// Permite borrar una instancia
-        /// </summary>
-        /// <param name="id">Identificador de la instancia a borrar</param>
-        [HttpDelete("{id}")]
-        public ActionResult Delete(string id)
-        {
-            try {
-                var product = this.service.Get(id);
-                this.service.Delete(product);
-                return Ok(new { Success = true, Message = "", data = id });
-            } catch {
-                return Ok(new { Success = false, Message = "", data = id });
-            }
-        }
-
-        /// <summary>
-        /// Permite conocer el stock de un producto
-        /// </summary>
-        /// <param name="id">Identificador del producto</param>
-        /// <returns>El stock disponible</returns>
-        [HttpGet("stock/{id}")]
-        public ActionResult<GenericResultDTO<int>> ObtenerStock(string id)
-        {
-            return new GenericResultDTO<int>(this.service.ObtenerStock(id));
-        }
-
-        /// <summary>
-        /// Permite descontar una cantidad de stock a un producto
-        /// </summary>
-        /// <param name="id">Identificador del producto</param>
-        /// <param name="value">La cantidad a descontar</param>
-        [HttpPut("stock/descontar/{id}")]
-        public void DescontarStock(string id, [FromBody] int value)
-        {
-            this.service.DescontarStock(id, value);
-        }
-
-        /// <summary>
-        /// Permite sumar una cantidad de stock a un producto
-        /// </summary>
-        /// <param name="id">Identificador del producto</param>
-        /// <param name="value">La cantidad a sumar</param>
-        [HttpPut("stock/sumar/{id}")]
-        public void SumarStock(string id, [FromBody] int value)
-        {
-            this.service.SumarStock(id, value);
-        }
-
-        /// <summary>
-        /// Permite obtener el precio de venta al público de un producto
-        /// </summary>
-        /// <param name="id">Identificador del producto</param>
-        /// <returns>El precio de venta al público</returns>
-        [HttpGet("precioVenta/{id}")]
-        public ActionResult<GenericResultDTO<decimal>> ObtenerPrecioVenta(string id)
-        {
-            return new GenericResultDTO<decimal>(this.service.ObtenerPrecioVentaPublico(id));
-        }
-
-        /// <summary>
-        /// Permite obtener el precio de venta de un producto para un empleado
-        /// </summary>
-        /// <param name="id">Identificador del producto</param>
-        /// <returns>El precio de venta para un empleado</returns>
-        [HttpGet("precioVentaEmpleado/{id}")]
-        public ActionResult<GenericResultDTO<decimal>> ObtenerPrecioVentaEmpleado(string id)
-        {
-            return new GenericResultDTO<decimal>(this.service.ObtenerPrecioVentaEmpleado(id));
+            return Ok(new {Success = true, Message = "List of all Products", 
+                            Products = this.mapper.Map<IEnumerable<ProductDTO>>(products).ToList()} );
         }
     }
 }

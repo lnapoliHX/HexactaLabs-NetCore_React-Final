@@ -1,29 +1,26 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Container, Row, Col } from "reactstrap";
 import { goBack } from "connected-react-router";
-import Form from "../../form/presentation";
-import { update } from "..";
+import { Container, Row, Col } from "reactstrap";
 import { getProductById } from "../../list";
+import { update } from "..";
+import Form from "../../form/presentation";
+import { getProductTypes } from "../../../productTypes/list";
 import { getProviders } from "../../../providers/list";
-import { getProductTypes } from "../../../productType/list";
 
-const Update = ({
-  initialValues,
-  update: onSubmit,
-  goBack: onCancel,
-  productTypeOptions,
-  providerOptions
-}) => {
+const Update = (
+  { 
+    update: onSubmit, 
+    goBack: onCancel,
+    productTypeOptions,
+    providerOptions,
+    initialValues
+  }) => {
   return (
     <Container fluid>
       <Row>
-        <Col>
-            <div className="block-header">
-                <h1>Edición</h1>
-            </div>
-        </Col>
+        <h2>Edición</h2>
       </Row>
       <Row>
         <Col>
@@ -31,8 +28,8 @@ const Update = ({
             initialValues={initialValues}
             productTypeOptions={productTypeOptions}
             providerOptions={providerOptions}
-            onSubmit={onSubmit}
-            handleCancel={onCancel}
+            onSubmit={onSubmit} 
+            handleCancel={onCancel} 
           />
         </Col>
       </Row>
@@ -41,24 +38,30 @@ const Update = ({
 };
 
 Update.propTypes = {
+  initialValues: PropTypes.object.isRequired,
   productTypeOptions: PropTypes.array.isRequired,
   providerOptions: PropTypes.array.isRequired,
-  initialValues: PropTypes.object.isRequired,
   update: PropTypes.func.isRequired,
-  goBack: PropTypes.func.isRequired
+  goBack: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  productTypeOptions: getProductTypes(state).map(pt => ({
-    label: pt.initials,
-    value: pt.id
-  })),
-  providerOptions: getProviders(state).map(provider => ({
-    label: provider.name,
-    value: provider.id
-  })),
-  initialValues: getProductById(state, ownProps.match.params.id)
-});
+const mapStateToProps = (state, ownProps) => {
+  const productTypes = getProductTypes(state);
+  const providers = getProviders(state);
+  return {
+    initialValues: getProductById(state, ownProps.match.params.id),
+    productTypeOptions: productTypes.map(pt => ({
+      id: pt.id,
+      label: pt.description,
+      value: pt.id
+    })),
+    providerOptions: providers.map(provider => ({
+      id: provider.id,
+      label: provider.name,
+      value: provider.id
+    })),
+  }
+};
 
 const mapDispatchToProps = {
   update,

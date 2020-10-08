@@ -7,9 +7,10 @@ import NavMenu from "./page/NavMenu";
 // import Footer from './page/Footer';
 import BodyContainer from "./page/BodyContainer";
 
-const Layout = props => (
+const Layout = props => {
+  return (
   <React.Fragment>
-    <NavMenu />
+    <NavMenu itemsCount={props.productQuantity}/>
     <Container fluid>
       <Row>
         <Sidebar {...props} />
@@ -17,7 +18,7 @@ const Layout = props => (
       </Row>
     </Container>
   </React.Fragment>
-);
+); }
 
 const mapStateToProps = state => ({
   router: state.router

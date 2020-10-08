@@ -1,73 +1,61 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
-using Microsoft.Extensions.Options;
 using Stock.AppService.Base;
 using Stock.Model.Entities;
 using Stock.Repository.LiteDb.Interface;
-using Stock.Settings;
 
 namespace Stock.AppService.Services
 {
-    public class ProductService: BaseService<Product>
+    public class ProductService : BaseService<Product>
     {
-        private readonly IOptions<DomainSettings> domainSettings;
-
-        public ProductService(IRepository<Product> repository, IOptions<DomainSettings> domainSettings)
-            : base(repository)
-        {
-            this.domainSettings = domainSettings;
+        public ProductService(IRepository<Product> repository) : base(repository)
+        {    
+              
         }
 
-        public int ObtenerStock(string idProducto)
+        public new Product Create(Product entity)
         {
-            var producto = this.Repository.GetById(idProducto);
-            return producto.Stock;
-        }
-
-        public void DescontarStock(string idProducto, int value)
-        {
-            var producto = this.Repository.GetById(idProducto);
-            producto.DescontarStock(value);
-            this.Repository.Update(producto);
-        }
-
-        public void SumarStock(string idProducto, int value)
-        {
-            var producto = this.Repository.GetById(idProducto);
-            producto.SumarStock(value);
-            this.Repository.Update(producto);
-        }
-
-        public decimal ObtenerPrecioVentaPublico(string idProducto)
-        {
-            var electroTypeId = this.domainSettings.Value.ElectroTypeId;
-            var producto = this.Repository.GetById(idProducto);
-            var margenGanancia = producto.SalePrice - producto.CostPrice;
-            if (producto.ProductType.Id != electroTypeId.ToString())
+            if (this.NombreUnico(entity.Id, entity.Name))
             {
-                var exceso = margenGanancia - (producto.CostPrice * 0.1M);
-                if (exceso > 0)
-                {
-                    exceso = exceso * 0.2M;
-                    return producto.CostPrice + (producto.CostPrice * 0.1M) + exceso;
-                }
-            }
-            else
-            {
-                return producto.CostPrice + (margenGanancia * 0.5M);
+                return base.Create(entity);
             }
 
-            return producto.SalePrice;
+            throw new System.Exception("The name is already in use");
         }
 
-        public decimal ObtenerPrecioVentaEmpleado(string idProducto)
+        private bool NombreUnico(string id, string name)
         {
-            var producto = this.Repository.GetById(idProducto);
-            return producto.CostPrice;
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return false;
+            }
+
+            return this.Repository.List(x => x.Name.ToUpper().Equals(name.ToUpper()) &&
+                                             !x.Id.Equals(id)).Count == 0;
         }
 
-        public IEnumerable<Product> Search(Expression<Func<Product,bool>> filter)
+        public new Product Update(Product entity)
+        {
+            if (this.NombreUnico(entity.Id, entity.Name))
+            {
+                return base.Update(entity);
+            }
+
+            throw new System.Exception("The name is already in use");
+        }
+
+        public IEnumerable<Product> GetProductsByProductTypeId(string id) 
+        {
+            return this.Repository.List(x => x.ProductType.Id.Equals(id));
+        }
+
+        public IEnumerable<Product> GetProductsByProviderId(string id) 
+        {
+            return this.Repository.List(x => x.ProviderId.Equals(id));
+        }
+
+        public IEnumerable<Product> Search(Expression<Func<Product, bool>> filter)
         {
             return this.Repository.List(filter);
         }

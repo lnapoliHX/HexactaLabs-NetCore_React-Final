@@ -1,17 +1,18 @@
-import { cloneDeep, pickBy } from "lodash";
+import { pickBy } from "lodash";
 import api from "../../../common/api";
 import { apiErrorToast } from "../../../common/api/apiErrorToast";
-import { normalize } from "../../../common/helpers/normalizer";
 import { setProviders } from "../../providers/list";
-import { setProductTypes } from "../../productType/list";
+import { setProductTypes } from "../../productTypes/list";
 
 const initialState = {
   loading: false,
-  ids: [],
-  byId: {}
+  products: [],
+//  productTypes: [],
+//  providers: []
 };
 
-/* Action Types */
+/* Action types */
+
 const LOADING = "PRODUCTS_LOADING";
 const SET = "PRODUCTS_SET";
 const CREATE = "PRODUCTS_CREATE";
@@ -37,41 +38,28 @@ function handleLoading(state, { loading }) {
 function handleSet(state, { products }) {
   return {
     ...state,
-    ids: products.map(product => product.id),
-    byId: normalize(products)
+    products,
   };
 }
-
 
 function handleNewProduct(state, { product }) {
   return {
     ...state,
-    ids: state.ids.concat([product.id]),
-    byId: {
-      ...state.byId,
-      [product.id]: cloneDeep(product)
-    }
+    products: state.products.concat(product)
   };
 }
 
 function handleUpdateProduct(state, { product }) {
   return {
     ...state,
-    byId: { ...state.byId, [product.id]: cloneDeep(product) }
+    products: state.products.map(p => (p.id === product.id ? product : p))
   };
 }
 
 function handleRemoveProduct(state, { id }) {
   return {
     ...state,
-    ids: state.ids.filter(productId => productId !== id),
-    byId: Object.keys(state.byId).reduce(
-      (acc, productId) =>
-        productId !== `${id}`
-          ? { ...acc, [productId]: state.byId[productId] }
-          : acc,
-      {}
-    )
+    products: state.products.filter(p => p.id !== id)
   };
 }
 
@@ -103,21 +91,19 @@ export function setProducts(products) {
   };
 }
 
-
-export function fetchAll() {
-  return function (dispatch) {
+export function getAllData() {
+  return dispatch => {
     dispatch(setLoading(true));
     return Promise.all([
       api.get("/product"),
       api.get("/producttype"),
-      api.get("/provider")
-    ])
-      .then(([products, types, providers]) => {
-        dispatch(setProducts(products.data));
-        dispatch(setProductTypes(types.data));
-        dispatch(setProviders(providers.data));
-        dispatch(setLoading(false));
-      })
+      api.get("/provider")])
+      .then(([responseProducts, responseProductTypes, responseProviders]) => {
+          dispatch(setProducts(responseProducts.data.products));
+          dispatch(setProductTypes(responseProductTypes.data.productTypes));
+          dispatch(setProviders(responseProviders.data.providers));
+          return dispatch(setLoading(false));
+        })
       .catch(error => {
         apiErrorToast(error);
         return dispatch(setLoading(false));
@@ -125,40 +111,19 @@ export function fetchAll() {
   };
 }
 
-export function fetchById(id) {
-  return fetchAll({ id });
+export function getById(id) {
+  return getAllData({ id });
 }
 
 export function fetchByFilters(filters) {
-  return function (dispatch) {
+  return function(dispatch) {
     return api
       .post("/product/search", pickBy(filters))
       .then(response => {
-        const products = response.data.map(product => ({
-          ...product,
-          productTypeId: product.productType.id,
-          productTypeDesc: product.productType.description
-        }));
-        dispatch(setProducts(products));
+        dispatch(setProducts(response.data.products));
       })
       .catch(error => {
         apiErrorToast(error);
-      });
-  };
-}
-
-export function fetchAllTypes() {
-  return function (dispatch) {
-    dispatch(setLoading(true));
-    return api
-      .get("/producttype")
-      .then(response => {
-        dispatch(setProductTypes(response.data));
-        return dispatch(setLoading(false));
-      })
-      .catch(error => {
-        apiErrorToast(error);
-        return dispatch(setLoading(false));
       });
   };
 }
@@ -172,30 +137,10 @@ export function getLoading(state) {
   return base(state).loading;
 }
 
-export function getProductsById(state) {
-  return base(state).byId;
+export function getProducts(state) {
+  return base(state).products;
 }
 
 export function getProductById(state, id) {
-  return getProductsById(state)[id] || {};
+  return getProducts(state).find(p => p.id === id);
 }
-
-export function getProductIds(state) {
-  return base(state).ids;
-}
-
-export function makeGetProductsMemoized() {
-  let cache;
-  let value = [];
-  return state => {
-    if (cache === getProductsById(state)) {
-      return value;
-    }
-    cache = getProductsById(state);
-    value = Object.values(getProductsById(state));
-    return value;
-  };
-}
-
-export const getProducts = makeGetProductsMemoized();
-

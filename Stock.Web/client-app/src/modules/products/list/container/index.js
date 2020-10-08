@@ -1,70 +1,100 @@
-import React, { Component } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { push } from "connected-react-router";
-import Products from "../presentation/Products";
-import { getProducts, fetchByFilters, fetchAll } from "../index";
-import { getProvidersById } from "../../../providers/list";
-import { getById } from "../../../productType/list";
+import PropTypes from "prop-types";
+import { getProducts, getAllData, fetchByFilters } from "../index";
+import { getProductTypes } from "../../../productTypes/list/index";
+import { getProviders } from "../../../providers/list/index";
+import Presentation from "../presentation";
 
-export class ProductsPage extends Component {
-  constructor() {
-    super();
-    this.state = {
-      filters: {
-        Name: "",
-        Brand: "",
-        Condition: "AND"
-      }
+const initialState = {
+  name: "",
+  condition: "AND"
+};
+
+class ProductsPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { 
+      ...initialState,
+      products: this.props.products,
+      skipPageReset: false
     };
   }
-
-  submitFilter = event => {
-    event.preventDefault();
-    this.props.fetchByFilters(this.state.filters);
+  
+  onFilterChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
   };
 
-  filterChanged = event => {
-    const newFilters = {
-      ...this.state.filters,
-      [event.target.name]: event.target.value
-    };
-    this.setState({ filters: newFilters });
+  onFilterSubmit = () => {
+    this.props.fetchByFilters(this.state);
+  };
+
+  onFilterReset = () => {
+    this.setState({ ...initialState });
+    this.props.getAllData();
+  };
+
+  onQuantityChange = (index, value) => {
+    this.props.products[index].quantityToOrder = value;
+  };
+
+  setQuantityToOrderProducts = (item) => {
+    let i = this.props.products.findIndex((product) => product.id === item.productId);
+    if (i >= 0)
+        this.props.products[i].quantityToOrder = item.quantity;
   };
 
   render() {
+    const { products, productTypes, providers, loading, orderedItems, order, ...rest } = this.props;
+
+    order.items.forEach(this.setQuantityToOrderProducts);
     return (
-      <Products
-        data={this.props.products}
+      <Presentation
+        data={products}
+        dataLoading={loading}
         defaultPageSize={5}
-        filters={this.state.filters}
-        handleFilter={this.filterChanged}
-        submitFilter={this.submitFilter}
-        clearFilter={this.props.fetchAll}
-        dataLoading={this.props.loading}
-        {...this.props}
+        filters={this.state}
+        onFilterChange={this.onFilterChange}
+        onFilterSubmit={this.onFilterSubmit}
+        clearFilter={this.onFilterReset}
+        onAddItemToCart={this.props.onAddItemToCart}
+        resetCart={this.props.resetCart}
+        order={this.props.order}
+        {...rest}
       />
     );
   }
 }
 
+ProductsPage.propTypes = {
+  products: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
+  getAllData: PropTypes.func.isRequired,
+  push: PropTypes.func.isRequired,
+  fetchByFilters: PropTypes.func.isRequired
+};
+
 const mapStateToProps = state => {
-  const providersById = getProvidersById(state);
+  //console.log('product.list.container.state', state);
   return {
+    productTypes: getProductTypes(state),
+    providers: getProviders(state),
     products: getProducts(state).map(product => ({
       ...product,
-      providerName: product.providerId
-        ? providersById[product.providerId].name
-        : "",
-      category: getById(state, product.productTypeId).description
-    })),
-    providers: providersById
-  };
+      productTypeDesc: getProductTypes(state).length > 0 ? 
+                          getProductTypes(state).find(pt => pt.id === product.productTypeId).description : '',
+      providerName: getProviders(state).length > 0 ? 
+                          getProviders(state).find(prov => prov.id === product.providerId).name : '', 
+      quantityToOrder: 0,       
+  })),
+  }
 };
 
 const mapDispatchToProps = {
-  fetchByFilters,
-  fetchAll,
-  push
+  getAllData,
+  push,
+  fetchByFilters
 };
 
 export default connect(

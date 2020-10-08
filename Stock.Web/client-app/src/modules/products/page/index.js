@@ -8,12 +8,26 @@ import View from "../view/container";
 import Create from "../create/container";
 import Update from "../update/container";
 import Remove from "../remove/container";
-import { getLoading, fetchAll } from "../list";
+import OrderCheckout from "../checkout/container";
+import CheckoutResult from "../checkoutResult/container";
+import { getLoading, getAllData } from "../list";
 import Spinner from "../../../components/loading/spinner";
 
-export class ProductsPage extends Component {
+export class Page extends Component {
   componentDidMount() {
-    this.props.fetchAll();
+    this.props.getAllData();
+  }
+
+  state = {
+    requestedOrder: {},
+    okOrder: {},
+  }
+
+  handleCheckoutResponse = (requestedOrder, okOrder) => {
+    this.setState({
+      requestedOrder: requestedOrder,
+      okOrder: okOrder  
+    })
   }
 
   render() {
@@ -21,7 +35,9 @@ export class ProductsPage extends Component {
       view: `${this.props.match.url}/view/:id`,
       create: `${this.props.match.url}/create`,
       edit: `${this.props.match.url}/update/:id`,
-      remove: `${this.props.match.url}/remove/:id`
+      remove: `${this.props.match.url}/remove/:id`,
+      checkout: `/product/checkout`,
+      checkoutResult: `/product/checkoutResult`,
     };
 
     return (
@@ -29,9 +45,24 @@ export class ProductsPage extends Component {
         <Switch>
           <Route path={urls.view} component={View} />
           <Route path={urls.create} component={Create} />
+          <Route path={urls.checkout} 
+            render={() => <OrderCheckout order={{...this.props.order,
+                                         items: this.props.order.items.filter(item => item.quantity !== 0
+                                         )}} 
+                                          resetCart={this.props.resetCart}
+                                          handleResponse={this.handleCheckoutResponse} />} />
+          <Route path={urls.checkoutResult} 
+            render={() => <CheckoutResult 
+                            okOrder={this.state.okOrder} 
+                            requestedOrder={this.state.requestedOrder}/>} />
           <Route path={urls.edit} component={Update} />
           <Route
-            render={() => <List urls={urls} loading={this.props.loading} />}
+            render={() => <List urls={urls} 
+                            loading={this.props.loading} 
+                            order={{...this.props.order,
+                              items: this.props.order.items.filter(item => item.quantity !== 0
+                              )}}
+                            onAddItemToCart={this.props.onAddItemToCart}/>}
           />
         </Switch>
         <Route path={urls.remove} component={Remove} />
@@ -40,10 +71,10 @@ export class ProductsPage extends Component {
   }
 }
 
-ProductsPage.propTypes = {
+Page.propTypes = {
   match: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired,
-  fetchAll: PropTypes.func.isRequired
+  getAllData: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => {
@@ -51,10 +82,10 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  fetchAll
+  getAllData
 };
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ProductsPage);
+)(Page);
