@@ -4,6 +4,8 @@
 }
 
 .ui-header-brand {
+    color: white;
+    background: #009688;
 }
 
 .ui-header-options .btn {

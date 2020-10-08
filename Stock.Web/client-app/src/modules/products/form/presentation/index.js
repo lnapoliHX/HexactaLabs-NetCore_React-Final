@@ -83,16 +83,3 @@ export default reduxForm({
   validate: Validator(schema),
   enableReinitialize: true
 })(ProductForm);
-/*
-ProductForm = reduxForm({
-  form: "product",
-  validate: Validator(schema),
-  enableReinitialize: true
-})(ProductForm);
-
-ProductForm = connect(product => {
-  return product;
-})(ProductForm)
-
-export default ProductForm;
-*/

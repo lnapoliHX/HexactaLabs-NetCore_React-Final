@@ -9,6 +9,8 @@ import { Link } from "react-router-dom";
 import { getProductTypes } from "../../../productTypes/list";
 import { getProviders } from "../../../providers/list";
 
+//const Create = (props) => {
+  
 const Create = (
     { 
       create: onSubmit, 
@@ -17,6 +19,15 @@ const Create = (
       providerOptions,
       initialValues
     }) => {
+/*
+  const onSubmit = props.create;
+  const onCancel = props.goBack;
+  const productTypeOptions = props.productTypeOptions;
+  const providerOptions = props.providerOptions;
+  const initialValues = props.initialValues;
+*/
+
+//  console.log('products.create.container: ', props);
 
   return (
     <Container fluid>

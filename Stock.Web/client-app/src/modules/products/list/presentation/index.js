@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Container, Row, Col, Button } from "reactstrap";
 import { FaPlus } from "react-icons/fa";
@@ -6,7 +6,60 @@ import ReactTable from "react-table";
 import columns from "./ColumnsConfig";
 import Search from "./ProductSearch";
 
+import { FaCartPlus } from "react-icons/fa";
+
 const Presentation = props => {
+  const [editableData, setEditableData] = useState(props.data);
+  const onAddItemToCart = props.onAddItemToCart;
+
+  const renderEditable = (cellInfo) => {
+    return (
+      <div
+        style={{ backgroundColor: "#fafafa", padding: 2 }}
+        contentEditable
+        suppressContentEditableWarning
+        onBlur={e => {
+          const data = editableData;
+          data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+          setEditableData(data);
+        }}
+        dangerouslySetInnerHTML={{
+          __html: editableData[cellInfo.index][cellInfo.column.id]
+        }}
+      />
+    );
+  }
+
+  const onClickAddItemButton = (props) => {
+    onAddItemToCart(props.original.id, 
+                    props.original.name, 
+                    props.original.salePrice,
+                    props.original.quantityToOrder, 
+                    props.original.stock);
+  }
+
+  const renderAddItemButton = (props) => {
+    let addItemToCartButton = (
+      <button className="product-list__button3"
+                onClick={() => onClickAddItemButton(props)}              
+                id={props.value} >
+                <FaCartPlus className="product-list__button-icon3" />
+      </button>
+    );
+
+    return (
+      <span>
+        {addItemToCartButton}
+      </span>
+    );
+  };
+
+  let idx = columns.findIndex(col => col.accessor === 'quantityToOrder');
+  columns[idx] = { ...columns[idx], Cell: renderEditable };
+
+  idx = columns.findIndex(col => col.Header.props.title === 'Comprar');
+  columns[idx] = { ...columns[idx], Cell: renderAddItemButton};
+
   return (
     <Container fluid>
       <Row className="my-1">
@@ -33,6 +86,14 @@ const Presentation = props => {
           >
             <FaPlus className="product__button-icon" />
             Agregar
+          </Button>
+          <Button
+            className="product__button2"
+            color="danger"
+            onClick={() => props.push(props.urls.checkout)}
+          >
+            <FaPlus className="product__button-icon" />
+            Checkout
           </Button>
         </Col>
       </Row>

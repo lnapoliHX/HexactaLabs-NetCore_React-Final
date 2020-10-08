@@ -45,7 +45,8 @@ const menu = [
   menu_factory("Proveedores", "/provider", "algun-icon"),
   menu_factory("Tiendas", "/store", "algun-icon"),
   menu_factory("Categorías", "/productType", "algun-icon"),
-  menu_factory("Productos", "/product", "algun-icon")
+  menu_factory("Productos", "/product", "algun-icon"),
+  menu_factory("Ordenes", "/order", "algun-icon"),
 ];
 
 ReactDOM.render(

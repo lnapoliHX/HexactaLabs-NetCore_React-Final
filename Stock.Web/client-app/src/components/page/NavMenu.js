@@ -12,6 +12,7 @@ import {
 } from "reactstrap";
 import { FaUserInjured } from "react-icons/fa";
 import { NavLink as Link } from "react-router-dom";
+import ShoppingCart from "./ShoppingCart";
 import "./NavMenu.css";
 
 export default class NavMenu extends React.Component {
@@ -31,6 +32,7 @@ export default class NavMenu extends React.Component {
     return (
       <Navbar className="ui-header" expand="md">
         <NavbarBrand className="ui-header-brand">Hexacta Labs</NavbarBrand>
+        <ShoppingCart itemsCount={this.props.itemsCount()}/>
         <NavbarToggler onClick={this.toggle} />
         <Collapse isOpen={this.state.isOpen} navbar>
           <Nav className="ml-auto" navbar>
