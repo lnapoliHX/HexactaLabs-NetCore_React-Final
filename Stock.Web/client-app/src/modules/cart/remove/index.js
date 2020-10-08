@@ -32,7 +32,7 @@ export function remove(id) {
 
         dispatch(success(id));
         dispatch(setLoading(false));
-        toast.success("Se eliminó el producto con éxito");
+        toast.success("La compra se elimino con éxito");
         
         return dispatch(replace("/product"));
       })
