@@ -1,24 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { FaEdit, FaTrash, FaSearch, FaShoppingCart } from "react-icons/fa";
-
-import InputField from "../../../../components/inputs/InputField";
-import { Input, Button, Container, Row, Col } from "reactstrap";
+import { FaTrash } from "react-icons/fa";
+import { Container, Row, Col } from "reactstrap";
 
 const renderToolbar = ({ value }) => {
-  let viewButton = (
-    <Link className="product-list__button" to={`/product/view/${value}`}>
-      <FaSearch className="product-list__button-icon" />
-    </Link>
-  );
-
-  let editButton = (
-    <Link className="product-list__button" to={`/product/update/${value}`}>
-      <FaEdit className="product-list__button-icon" />
-    </Link>
-  );
-
   let removeButton = (
     <Link className="product-list__button" onClick = {() => localStorage.removeItem(value)} to={`/cart`}>
       <FaTrash className="product-list__button-icon" />
@@ -27,19 +13,12 @@ const renderToolbar = ({ value }) => {
 
   return (
     <span>
-      {viewButton}
-      {editButton}
       {removeButton}
     </span>
   );
 };
 
-
-
-
-
 const RenderCant = ({ value: productId }) => {
-  let valor;
   let purchaseField = (
     <Container>
       <Col>
@@ -58,8 +37,6 @@ const RenderCant = ({ value: productId }) => {
     </span>
   );
 };
-
-
 
 const HeaderComponent = props => {
   return (

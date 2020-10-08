@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 import { FaEdit, FaTrash, FaSearch, FaShoppingCart } from "react-icons/fa";
-import { Input, Button, Container, Row, Col } from "reactstrap";
+import { Input, Container, Row, Col } from "reactstrap";
 
 const renderToolbar = ({ value }) => {
   let viewButton = (
@@ -34,7 +34,9 @@ const renderToolbar = ({ value }) => {
 };
 
 
-const RenderPurchase = ({ value: productId }) => {
+//const RenderPurchase = ({ value: productId }) => {
+  const RenderPurchase = ( props ) => {
+    console.log("props",props)
   let valor;
   let purchaseField = (
     <Container>
@@ -53,7 +55,8 @@ const RenderPurchase = ({ value: productId }) => {
           </Col>         
           <Col md="3">
             <Link className="product-list__button" 
-              onClick={() => {(localStorage.setItem(productId, JSON.stringify({ id: productId, valor })));}}
+            //onClick={() => {(localStorage.setItem(productId, JSON.stringify({ id: productId, valor })));}}
+              onClick={() => {(localStorage.setItem(props.original.id, JSON.stringify({ id: props.original.id, valor })));}}
               to={`/cart`}>
               <FaShoppingCart className="product-list__button-icon" />
             </Link>
@@ -64,8 +67,8 @@ const RenderPurchase = ({ value: productId }) => {
   );
 
   return (
-    <span>
-      {purchaseField}
+    <span>      
+      {props.original.stock > 0 ? purchaseField : (<Container></Container>) }    
     </span>
   );
 };
@@ -99,7 +102,8 @@ const columns = [
   {
     Header: <HeaderComponent title="Compra" />,
     accessor: "id",
-    Cell: RenderPurchase
+    //Cell: RenderPurchase,
+    Cell :  (props) => { return RenderPurchase(props) }
   },
   {
     Header: <HeaderComponent title="Acciones" />,

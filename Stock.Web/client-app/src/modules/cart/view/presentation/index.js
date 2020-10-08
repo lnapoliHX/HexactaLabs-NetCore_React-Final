@@ -1,14 +1,13 @@
 import React from "react";
-import { Container, Row, Col, Button } from "reactstrap";
-import PropTypes from "prop-types";
+import { Container, Row, Col } from "reactstrap";
+
 
 const ProductView = props => {
-  console.log("VIEW------------------------->",props);
   let acum = 0;
     props.cart.byId.forEach(element => {
         acum += (element.purchaseQuantity*element.salePrice)
     });
-    
+
   return (
     <Container fluid>
         <div className="block-header">
@@ -20,7 +19,7 @@ const ProductView = props => {
                 <Col><h5>CANTIDAD</h5></Col>
             </Row>           
             {
-                props.cart.byId.map(el => <Row><Col lg="2">{el.name}</Col> <Col>{el.purchaseQuantity}</Col></Row>) 
+                props.cart.byId.map(el => <Row key={el.name}><Col lg="2">{el.name}</Col> <Col>{el.purchaseQuantity}</Col></Row>) 
             }
             
             <Row>
@@ -31,12 +30,5 @@ const ProductView = props => {
     </Container>
   );
 };
-
-// ProductView.propTypes = {
-//   product: PropTypes.object.isRequired,
-//   provider: PropTypes.object.isRequired,
-//   push: PropTypes.func.isRequired,
-//   match: PropTypes.object.isRequired
-// };
 
 export default ProductView;

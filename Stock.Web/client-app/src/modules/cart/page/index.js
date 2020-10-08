@@ -4,22 +4,17 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Switch, Route } from "react-router-dom";
 import List from "../list/container";
-
-import Remove from "../remove/container";
 import View from "../view/container";
-import { getLoading, fetchAll } from "../list";
+import { getLoading } from "../list";
 import Spinner from "../../../components/loading/spinner";
 
 export class CartsPage extends Component {
-  componentDidMount() {
-    this.props.fetchAll();
-  }
+
 
   render() {
     const urls = {
       view: `${this.props.match.url}/view`,
       edit: `${this.props.match.url}/update/:id`,
-      remove: `${this.props.match.url}/remove/:id`
     };
 
     return (
@@ -29,9 +24,7 @@ export class CartsPage extends Component {
           <Route
             render={() => <List urls={urls} loading={this.props.loading} />}
           />
-        </Switch>
-        <Route path={urls.remove} component={Remove} />
-        
+        </Switch>         
       </Spinner>
     );
   }
@@ -39,8 +32,7 @@ export class CartsPage extends Component {
 
 CartsPage.propTypes = {
   match: PropTypes.object.isRequired,
-  loading: PropTypes.bool.isRequired,
-  fetchAll: PropTypes.func.isRequired
+  loading: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => {
@@ -48,7 +40,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  fetchAll
 };
 
 export default connect(
