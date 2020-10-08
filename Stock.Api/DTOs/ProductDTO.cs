@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+=======
+﻿using System.ComponentModel.DataAnnotations;
+>>>>>>> 793c351ba6774106181125d4f919cfc16954ae58
 
 namespace Stock.Api.DTOs
 {
