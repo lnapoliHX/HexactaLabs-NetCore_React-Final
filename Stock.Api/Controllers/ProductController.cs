@@ -174,6 +174,31 @@ namespace Stock.Api.Controllers
             return new GenericResultDTO<decimal>(this.service.ObtenerPrecioVentaPublico(id));
         }
 
+        [HttpPost("comprar")]
+        public ActionResult Post([FromBody] CarritoDTO[] value)
+        {
+            TryValidateModel(value);
+            var productosVendidos = new List<CarritoDTO>();
+            try
+            {
+                foreach (CarritoDTO c in value)
+                {
+                    if (this.service.DescontarStock(c.Id, c.cantidad))
+                    {
+                        var producto = this.service.Get(c.Id);
+                        c.Name = producto.Name;
+                        c.salePrice = producto.SalePrice;
+                        productosVendidos.Add(c);
+                    }
+                }
+                return Ok(new { Success = true, Message = "", data = productosVendidos });
+            }
+            catch
+            {
+                return Ok(new { Success = false, Message = "No se pudo realizar la compra" });
+            }
+        }
+
         /// <summary>
         /// Permite obtener el precio de venta de un producto para un empleado
         /// </summary>

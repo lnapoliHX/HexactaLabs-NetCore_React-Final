@@ -1,57 +1,31 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { FaEdit, FaTrash, FaSearch, FaShoppingCart } from "react-icons/fa";
-import { Input, Container, Row, Col } from "reactstrap";
+import { FaTrash } from "react-icons/fa";
+import { Container, Row, Col } from "reactstrap";
 
 const renderToolbar = ({ value }) => {
-  let viewButton = (
-    <Link className="product-list__button" to={`/product/view/${value}`}>
-      <FaSearch className="product-list__button-icon" />
-    </Link>
-  );
-
-  let editButton = (
-    <Link className="product-list__button" to={`/product/update/${value}`}>
-      <FaEdit className="product-list__button-icon" />
-    </Link>
-  );
-
   let removeButton = (
-    <Link className="product-list__button" to={`/product/remove/${value}`}>
+    <Link className="product-list__button" onClick = {() => localStorage.removeItem(value)} to={`/cart`}>
       <FaTrash className="product-list__button-icon" />
-    </Link>
-  );
-
-  let AddProduct = (
-    <Link className="product-list__button" onClick={() => {(localStorage.setItem(value, JSON.stringify({ id: value, valor })));}}to={`/cart`}>
-      <FaShoppingCart className="product-list__button-icon" />
     </Link>
   );
 
   return (
     <span>
-      {viewButton}
-      {editButton}
+      
       {removeButton}
-      {AddProduct}
+     
     </span>
   );
-};
-let valor;
-const renderStock = () => {
-  
+};  
+
+const renderStock = ({ value: productId }) => {
   let purchaseField = (
     <Container>
       <Col>
         <Row>
-          <Col>
-            <Input
-              label="Cantidad"
-              name="productId"
-              type="text"
-              id="prodId" onChange={e => {valor = e.target.value }}/>
-          </Col>
+          <Col><p>{ JSON.parse((Object.entries(localStorage).find(lsk => lsk[0] === productId ))[1]).valor }</p></Col>
         </Row>
       </Col>
     </Container>
@@ -86,12 +60,12 @@ const columns = [
     Cell: props => props.value
   },
   {
-    Header: <HeaderComponent title="Proovedor" />,
-    accessor: "providerName",
+    Header: <HeaderComponent title="Precio Producto" />,
+    accessor: "salePrice",
     Cell: props => props.value
   },
   {
-    Header: <HeaderComponent title="Stock" />,
+    Header: <HeaderComponent title="Cantidad" />,
     accessor: "id",
     Cell: renderStock
   },
