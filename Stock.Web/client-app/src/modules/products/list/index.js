@@ -39,8 +39,6 @@ function handleSet(state, { products }) {
   return {
     ...state,
     products,
-//    ids: products.map(products => products.id),
-//    byId: normalize(products)
   };
 }
 

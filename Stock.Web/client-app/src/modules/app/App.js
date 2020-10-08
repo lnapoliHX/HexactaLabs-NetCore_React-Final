@@ -66,8 +66,7 @@ const App = props => {
 
     const totalOrder = localOrder.items.map(item => item.total).reduce((a, b) => a + b);
 
-    //console.log('order items:', localOrder.items);
-    setOrder({
+     setOrder({
       ...localOrder, 
       items: localOrder.items,
       total: totalOrder
