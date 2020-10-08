@@ -8,19 +8,25 @@ import auth from "../modules/auth";
 import home from "../modules/home";
 import provider from "../modules/providers";
 import product from "../modules/products";
+import carrito from "../modules/carrito";
+import compras from "../modules/compras";
 import productType from "../modules/productType";
 import store from "../modules/stores";
 
 export default function configureStore(history, initialState) {
+  // let detalles = compras;
   const reducers = {
     form: formReducer,
     router: connectRouter(history),
     auth,
+    carrito,
+    compras,
+    //    detalles,
     home,
     provider,
     product,
     productType,
-    store
+    store,
   };
 
   const middleware = [thunk, routerMiddleware(history)];
@@ -42,9 +48,6 @@ export default function configureStore(history, initialState) {
   return createStore(
     rootReducer,
     initialState,
-    compose(
-      applyMiddleware(...middleware),
-      ...enhancers
-    )
+    compose(applyMiddleware(...middleware), ...enhancers)
   );
 }

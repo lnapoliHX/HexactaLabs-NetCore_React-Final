@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { FaEdit, FaTrash, FaSearch } from "react-icons/fa";
+import { FaEdit, FaTrash, FaSearch, FaArchive } from "react-icons/fa";
 
 const renderToolbar = ({ value }) => {
   let viewButton = (
@@ -22,21 +22,24 @@ const renderToolbar = ({ value }) => {
     </Link>
   );
 
+  let stockButton = (
+    <Link className="product-list__button" to={`/product/viewStock/${value}`}>
+      <FaArchive className="product-list__button-icon" />
+    </Link>
+  );
+
   return (
     <span>
       {viewButton}
       {editButton}
       {removeButton}
+      {stockButton}
     </span>
   );
 };
 
-const HeaderComponent = props => {
-  return (
-    <h2 className="tableHeading">
-      {props.title}
-    </h2>
-  );
+const HeaderComponent = (props) => {
+  return <h2 className="tableHeading">{props.title}</h2>;
 };
 
 HeaderComponent.displayName = "HeaderComponent";
@@ -45,32 +48,32 @@ const columns = [
   {
     Header: <HeaderComponent title="Nombre" />,
     accessor: "name",
-    Cell: props => props.value
+    Cell: (props) => props.value,
   },
   {
     Header: <HeaderComponent title="Tipo de producto" />,
     accessor: "category",
-    Cell: props => props.value
+    Cell: (props) => props.value,
   },
   {
     Header: <HeaderComponent title="Proovedor" />,
     accessor: "providerName",
-    Cell: props => props.value
+    Cell: (props) => props.value,
   },
   {
     Header: <HeaderComponent title="Acciones" />,
     accessor: "id",
-    Cell: renderToolbar
-  }
+    Cell: renderToolbar,
+  },
 ];
 
 HeaderComponent.propTypes = {
   title: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired
+  value: PropTypes.string.isRequired,
 };
 
 renderToolbar.propTypes = {
-  value: PropTypes.string.isRequired
+  value: PropTypes.string.isRequired,
 };
 
 export default columns;

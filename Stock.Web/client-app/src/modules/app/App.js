@@ -9,18 +9,20 @@ import ProviderPage from "../providers/page";
 import ProductPage from "../products/page/";
 import LogoutPage from "../auth/containers/LogoutPage";
 import ProductTypePage from "../productType/page";
+import CarritoPage from "../carrito/page";
 import StorePage from "../stores/page";
+import ComprasPage from "../compras/page";
 
 import PropTypes from "prop-types";
 
-const Private = props => {
+const Private = (props) => {
   if (localStorage.getItem("JWT_LOGIN")) {
     return props.children;
   }
   return <LoginPage />;
 };
 
-const App = props => (
+const App = (props) => (
   <Private>
     <Layout {...props}>
       <Route exact path="/" component={HomePage} />
@@ -28,6 +30,8 @@ const App = props => (
       <Route path="/product" component={ProductPage} />
       <Route path="/logout" component={LogoutPage} />
       <Route path="/product-type" component={ProductTypePage} />
+      <Route path="/carrito" component={CarritoPage} />
+      <Route path="/compras" component={ComprasPage} />
       <Route path="/store" component={StorePage} />
     </Layout>
     <ToastContainer autoClose={2000} />
@@ -35,7 +39,7 @@ const App = props => (
 );
 
 Private.propTypes = {
-  children: PropTypes.array
+  children: PropTypes.array,
 };
 
 App.displayName = "App";
