@@ -18,12 +18,14 @@ namespace Stock.Api.Controllers
     {
         private readonly ProductService service;
         private readonly ProductTypeService productTypeService;
+        private readonly ProviderService providerService;
         private readonly IMapper mapper;
 
-        public ProductController(ProductService service, ProductTypeService productTypeService, IMapper mapper)
+        public ProductController(ProductService service, ProductTypeService productTypeService, ProviderService providerService, IMapper mapper)
         {
             this.service = service;
             this.productTypeService = productTypeService;
+            this.providerService = providerService;
             this.mapper = mapper;
         }
 
@@ -68,6 +70,7 @@ namespace Stock.Api.Controllers
             try {
                 var product = this.mapper.Map<Product>(value);
                 product.ProductType = this.productTypeService.Get(value.ProductTypeId.ToString());
+                product.Provider = this.providerService.Get(value.ProviderId.ToString());
                 this.service.Create(product);
                 value.Id = product.Id;
                 return Ok(new { Success = true, Message = "", data = value });

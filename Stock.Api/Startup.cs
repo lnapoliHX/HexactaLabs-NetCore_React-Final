@@ -38,6 +38,7 @@ namespace Stock.Api
             services.AddTransient<ProductService>();
             services.AddTransient<ProviderService>();
             services.AddTransient<ProductTypeService>();
+            services.AddTransient<ShoppingService>();
             services.AddTransient<Repository.LiteDb.Configuration.ConfigurationProvider>();
             services.AddTransient<ILiteConfiguration, LiteConfiguration>();
             services.AddTransient<IDbContext, DataContext>();
@@ -45,6 +46,7 @@ namespace Stock.Api
             services.AddTransient<IRepository<Product>, BaseRepository<Product>>();
             services.AddTransient<IRepository<ProductType>, BaseRepository<ProductType>>();
             services.AddTransient<IRepository<Store>, BaseRepository<Store>>();
+            services.AddTransient<IRepository<Shopping>, BaseRepository<Shopping>>();
 
             services.AddAutoMapper();
 

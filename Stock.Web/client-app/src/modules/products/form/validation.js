@@ -5,6 +5,12 @@ export default yup.object().shape({
   name: yup.string().required(),
   costPrice: yup.number().required(),
   salePrice: yup.number().required(),
+  stock: yup
+    .number()
+    .integer()
+    .positive()
+    .min(1)
+    .required(),
   productTypeId: yup
     .string()
     .required()
