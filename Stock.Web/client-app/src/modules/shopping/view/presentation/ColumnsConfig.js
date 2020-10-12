@@ -19,7 +19,7 @@ const columns = [
   },
   {
     Header: <HeaderComponent title="Cantidad" />,
-    accessor: "cant",
+    accessor: "quantity",
     Cell: props => props.value
   },
   {

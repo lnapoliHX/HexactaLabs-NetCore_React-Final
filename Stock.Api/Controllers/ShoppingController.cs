@@ -43,10 +43,10 @@ namespace Stock.Api.Controllers
                 List<Product> productList = new List<Product>();
                 foreach(Product product in shopping.Products){
                     Product productUpdated = this.productService.Get(product.Id);
-                    if(productUpdated.Stock >= product.Cant){
+                    if(productUpdated.Stock >= product.Quantity){
                         productList.Add(product);
-                        totalPrice = totalPrice + (product.Cant * product.SalePrice);
-                        this.productService.DescontarStock(product.Id, product.Cant);
+                        totalPrice = totalPrice + (product.Quantity * product.SalePrice);
+                        this.productService.DescontarStock(product.Id, product.Quantity);
                     }
                 }
                 if(productList.Count==0){

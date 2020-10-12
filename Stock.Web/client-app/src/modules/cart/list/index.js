@@ -75,7 +75,7 @@ export function fetchLocal() {
         .then(response => {
           const carts = response.data.filter(function(cart){
             if(exists(cart.id)){
-              cart.cant = get(cart.id).cant;
+              cart.quantity = get(cart.id).quantity;
               return cart;
             }
           });
@@ -122,7 +122,7 @@ export function checkoutProducts(products) {
 export function totalPrice(products) {
   var totalPrice = 0;
   products.map(product => {
-    var productPrice = product.cant * product.salePrice;
+    var productPrice = product.quantity * product.salePrice;
     totalPrice = totalPrice + productPrice;
   });
   return totalPrice;

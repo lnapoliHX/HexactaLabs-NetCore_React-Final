@@ -25,6 +25,6 @@ namespace Stock.Api.DTOs
 
         public string ProviderId { get; set; }
 
-        public int Cant{ get; set; }
+        public int Quantity{ get; set; }
     }
 }

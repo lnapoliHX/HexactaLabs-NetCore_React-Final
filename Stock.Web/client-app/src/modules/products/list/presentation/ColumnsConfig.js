@@ -39,23 +39,23 @@ const addToCart = (value) => {
 
   var id = value.original.id;
   var stock = value.original.stock;
-  var cant;
+  var quantity;
   var noStock = stock===0;
 
-  let inputCart = (
+  const inputCart = (
     <Input
-        name="Cant"
+        name="Quantity"
         type="number"
         min="1"
         max={stock}
-        onChange={e => cant= e.target.value}
+        onChange={e => quantity= e.target.value}
         placeholder="Cantidad"
         required
       >
     </Input>
   );
   
-  let cartButton = (
+  const cartButton = (
     <Button
       className="product__button"
       color="primary"
@@ -71,7 +71,7 @@ const addToCart = (value) => {
 
   return (
     <span>
-      <Form onSubmit={() => setCart(id, cant, stock)}>
+      <Form onSubmit={() => setCart(id, quantity, stock)}>
         {inputCart}
         {cartButton}
       </Form>
