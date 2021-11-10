@@ -10,7 +10,6 @@ import provider from "../modules/providers";
 import product from "../modules/products";
 import productType from "../modules/productType";
 import store from "../modules/stores";
-import cart from "../modules/cart";
 
 export default function configureStore(history, initialState) {
   const reducers = {
@@ -21,8 +20,7 @@ export default function configureStore(history, initialState) {
     provider,
     product,
     productType,
-    store,
-    cart
+    store
   };
 
   const middleware = [thunk, routerMiddleware(history)];
@@ -30,8 +28,7 @@ export default function configureStore(history, initialState) {
   const enhancers = [];
   // eslint-disable-next-line no-undef
   const isDevelopment = process.env.NODE_ENV === "development";
-  
-  //const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
   if (
     isDevelopment &&
     typeof window !== "undefined" &&
@@ -44,10 +41,10 @@ export default function configureStore(history, initialState) {
 
   return createStore(
     rootReducer,
-    initialState,   
+    initialState,
     compose(
-      applyMiddleware(...middleware),      
+      applyMiddleware(...middleware),
       ...enhancers
-    )    
+    )
   );
 }
