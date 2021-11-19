@@ -23,10 +23,11 @@ namespace Stock.Api.MapperProfiles
                 .ForMember(d => d.ProductTypeDesc, opt => opt.MapFrom(s => s.ProductType.Description))
                 .ReverseMap()
                 .ForMember(s => s.Id, opt => opt.Ignore())
-                .ForMember(s => s.ProductType, opt => opt.Ignore());       
+                .ForMember(s => s.ProductType, opt => opt.Ignore());
 
             CreateMap<Provider, ProviderDTO>()
-                .ReverseMap();         
+                .ReverseMap()
+                .ForMember(x => x.Id, opt => opt.Ignore());
         }        
     }
 
